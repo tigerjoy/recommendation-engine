@@ -21,6 +21,9 @@ class MovieDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of Movie objects
+    # containing all the rows present in the
+    # movies_out table
     def getAllMovies(self):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
@@ -29,6 +32,9 @@ class MovieDAO():
 
         return output
 
+    # Return a list of Movie objects
+    # containing rows which have the movieId
+    # column same as the argument
     def searchByMovieID(self, movieId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE movieId = {movieId}")
@@ -36,6 +42,9 @@ class MovieDAO():
             output.append(self.convertRowToMovie(row))
         return output
 
+    # Return a list of Movie objects
+    # containing rows which have the title
+    # column similar to the argument
     def searchByTitle(self, title):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE title LIKE '%{title}%'")
@@ -43,6 +52,9 @@ class MovieDAO():
             output.append(self.convertRowToMovie(row))
         return output
 
+    # Return a list of Movie objects
+    # containing rows which contain the
+    # argument in the genre column
     def searchByGenre(self, genre):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE genres LIKE '%{genre}%'")
@@ -50,7 +62,8 @@ class MovieDAO():
             output.append(self.convertRowToMovie(row))
         return output
 
-
+    # Return a Movie object by converting
+    # a row list of SQLite to Movie(movieId, title, genres)
     def convertRowToMovie(self, row):
         movieId = row[0]
         title = row[1]
