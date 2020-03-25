@@ -42,7 +42,7 @@ class RatingDAO():
 
     # Return a list of Rating objects
     # containing rows which have the userId
-    # ciolumn same as the argument
+    # column same as the argument
     def searchByUserID(self, userId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE userId = {userId}")
