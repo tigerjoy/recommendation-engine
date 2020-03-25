@@ -2,14 +2,6 @@ import json
 import sqlite3
 from core.rating import Rating
 
-# Below import gives problem while running
-# ratingDAO.py
-# from .core.rating import Rating
-
-# Below import gives problem while running
-# ratingDAO.py
-# from dao.core.rating import Rating
-
 class RatingDAO():
 
     # Constructor
