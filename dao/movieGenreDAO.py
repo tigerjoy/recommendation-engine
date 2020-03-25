@@ -51,6 +51,19 @@ class MovieGenreDAO():
             output.append(self.convertRowToMovieGenre(row))
         return output
 
+    # Return a list of MovieGenre objects
+    # containing rows which have the movieId
+    # column same as the argument list
+    def searchByUserRatingList(self, ratingList):
+        output = []
+
+        for rating in ratingList:
+            movie_genres = self.searchByMovieID(rating.getMovieID())
+            for movieGenre in movie_genres:
+                output.append(movieGenre)
+
+        return output
+
     # Return a MovieGenre object by converting
     # a row list of SQLite to MovieGenre(movieId, genreId)
     def convertRowToMovieGenre(self, row):
@@ -68,5 +81,17 @@ if __name__ == "__main__":
     # for row in table:
     #     print(row)
 
-    for movie_genre in dao.searchByGenreID(1):
-        print(movie_genre)
+    # for movie_genre in dao.searchByGenreID(1):
+    #     print(movie_genre)
+
+    # for movie_genre in dao.searchByGenreID(1):
+    #     print(movie_genre)
+
+    from core.rating import Rating
+
+    # rating1 = Rating(1, 553, 5.0)
+
+    genres = dao.searchByUserRatingList(dao.searchByGenreID(1))
+
+    for genre in genres:
+        print(genre)
