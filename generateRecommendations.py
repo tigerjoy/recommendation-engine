@@ -1,6 +1,7 @@
 import json
 from dao.ratingDAO import RatingDAO
 from dao.movieGenreDAO import MovieGenreDAO
+from dao.averageRatingDAO import AverageRatingDAO
 
 CONFIG_FILE_PATH = "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json"
 
@@ -116,6 +117,7 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
 if __name__ == "__main__":
     ratingDAO = RatingDAO(CONFIG_FILE_PATH)
     movieGenreDAO = MovieGenreDAO(CONFIG_FILE_PATH)
+    averageRatingDAO = AverageRatingDAO(CONFIG_FILE_PATH)
     # Start Time
     # No changes to below line
     # start_time = time.time()
@@ -146,10 +148,24 @@ if __name__ == "__main__":
     # movie_gen.loc[movie_gen["genreId"] == 1]
     # movieGenreDAO.searchByGenreID(1)
 
-    # TODO: Implement merge function in averageRatingDAO ( join between AverageRating and MovieGenre )
-    # merged_df = average_rating.merge(movie_gen.loc[movie_gen["genreId"] == 1], on="movieId", how="inner")
+    # merged_df = average_rating.merge(movie_gen.loc[(movie_gen["genreId"] == 2) & (movie_gen["genreId"] == 1)],
+    #                                                                                   on="movieId", how="inner")
+    user1_most_liked_movies = averageRatingDAO.selectFromJoin([1, 2], False)
+    # SELECT movie_gen.movieId, avgRating, genreId
+    # FROM average_rating INNER JOIN ON average_rating.movieId = movie_gen.movieId
+    # WHERE genreId = 1;
+    # Return format:
+    # JSON
+    # {
+    #     "1":{
+    #         "genres": [2, 3, 4, 5, 9], ( Dont Need the Genre)
+    #         "avgRating": 3.92093023255814
+    #     }
+    # }
+    # OR
+    # Simple Object List is better as we dont need the genre,
+    # The genre information is already available to us
 
-    # TODO: Implement sort function for the merged
     # highestRated = merged_df.sort_values("avgRating", ascending=False)
 
     # Below lines for reference
