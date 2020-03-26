@@ -1,12 +1,7 @@
 class AverageRating:
 
-    # Non-Parameterized Constructor
-    def __init__(self):
-        self.movieId = None
-        self.avgRating = None
-
     # Parameterized Constructor
-    def __init__(self, movieId:int, avgRating:float) -> None:
+    def __init__(self, movieId: int = None, avgRating: float = None) -> None:
         self.movieId = movieId
         self.avgRating = avgRating
 
@@ -16,10 +11,10 @@ class AverageRating:
     def getAverageRating(self) -> float:
         return self.avgRating
 
-    def setMovieID(self, movieId:int) -> None:
+    def setMovieID(self, movieId: int) -> None:
         self.movieId = movieId
 
-    def setAverageRating(self, avgRating:float) -> None:
+    def setAverageRating(self, avgRating: float) -> None:
         self.avgRating = avgRating
 
     def __str__(self) -> str:
@@ -29,14 +24,15 @@ class AverageRating:
 if __name__ == "__main__":
     obj = AverageRating(1, 3.4)
 
-    print('obj.getMovieID() = ', obj.getMovieID())
-    print('obj.getAverageRating() = ', obj.getAverageRating())
-    print(obj)
-
-    obj.setMovieID(3)
-    obj.setAverageRating(4)
-
-    print('obj.getMovieID() = ', obj.getMovieID())
-    print('obj.getAverageRating() = ', obj.getAverageRating())
-
-    print(obj)
+    print("Movie ID from movieGenre object: ", obj.movieGenre.getMovieID())
+    # print('obj.getMovieID() = ', obj.getMovieID())
+    # print('obj.getAverageRating() = ', obj.getAverageRating())
+    # print(obj)
+    #
+    # obj.setMovieID(3)
+    # obj.setAverageRating(4)
+    #
+    # print('obj.getMovieID() = ', obj.getMovieID())
+    # print('obj.getAverageRating() = ', obj.getAverageRating())
+    #
+    # print(obj)

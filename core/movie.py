@@ -1,12 +1,7 @@
 class Movie:
 
-    # Non-Parameterized Constructor
-    def __init__(self):
-        self.movieId = None
-        self.genres = None
-
     # Parameterized Constructor
-    def __init__(self, movieId:int, title:str, genres:str) -> None:
+    def __init__(self, movieId:int = None, title:str = None, genres:str = None) -> None:
         self.movieId = movieId
         self.title = title
         self.genres = genres

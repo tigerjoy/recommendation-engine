@@ -1,32 +1,11 @@
 class UserMovieCount:
 
-    # Non-Parameterized Constructor
-    def __init__(self):
-        self.userId = None
-        self.Action = None
-        self.Adventure = None
-        self.Animation = None
-        self.Children = None
-        self.Comedy = None
-        self.Crime = None
-        self.Documentary = None
-        self.Drama = None
-        self.Fantasy = None
-        self.FilmNoir = None
-        self.Horror = None
-        self.IMAX = None
-        self.Musical = None
-        self.Mystery = None
-        self.Romance = None
-        self.SciFi = None
-        self.Thriller = None
-        self.War = None
-        self.Western = None
-
     # Parameterized Constructor
-    def __init__(self, userId:int, Action:int, Adventure:int, Animation:int, Children:int, Comedy:int, Crime:int,
-                 Documentary:int, Drama:int, Fantasy:int, FilmNoir:int, Horror:int, IMAX:int, Musical:int, Mystery:int,
-                 Romance:int, SciFi:int, Thriller:int, War:int, Western:int):
+    def __init__(self, userId:int = None, Action:int = None, Adventure:int = None, Animation:int = None,
+                 Children:int = None, Comedy:int = None, Crime:int = None, Documentary:int = None, Drama:int = None,
+                 Fantasy:int = None, FilmNoir:int = None, Horror:int = None, IMAX:int = None, Musical:int = None,
+                 Mystery:int = None,Romance:int = None, SciFi:int = None, Thriller:int = None, War:int = None,
+                 Western:int = None):
         self.userId = userId
         self.Action = Action
         self.Adventure = Adventure

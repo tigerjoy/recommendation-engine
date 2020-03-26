@@ -1,13 +1,7 @@
 class Rating:
 
-    # Non-Parameterized Constructor
-    def __init__(self):
-        self.userId = None
-        self.movieId = None
-        self.rating = None
-
     # Parameterized Constructor
-    def __init__(self, userId:int, movieId:int, rating:float) -> None:
+    def __init__(self, userId:int = None, movieId:int = None, rating:float = None) -> None:
         self.userId = userId
         self.movieId = movieId
         self.rating = rating
