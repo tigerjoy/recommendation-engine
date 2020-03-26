@@ -1,5 +1,8 @@
 import json
 from dao.ratingDAO import RatingDAO
+from dao.movieGenreDAO import MovieGenreDAO
+
+CONFIG_FILE_PATH = "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json"
 
 def readJSON(filename):
     with open(filename) as json_file:
@@ -111,39 +114,48 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
 
 
 if __name__ == "__main__":
-    ratingDAO = RatingDAO("C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json")
+    ratingDAO = RatingDAO(CONFIG_FILE_PATH)
+    movieGenreDAO = MovieGenreDAO(CONFIG_FILE_PATH)
     # Start Time
     # No changes to below line
     # start_time = time.time()
 
     # user1_movies = ratings[ratings["userId"] == 1]["movieId"]
-    # user1_movies =
+    user1_ratings = ratingDAO.searchByUserID(1)
     # To select only those rows where movieId belongs to user1_movies
     # user1_movie_gen = movie_gen.loc[movie_gen["movieId"].isin(user1_movies)]
+    user1_movie_genre = movieGenreDAO.searchByUserRatingList(user1_ratings)
 
+    # No change (maybe some change)
     # Calling the method to perform intersection
-    # (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionV2(user1_movie_gen,
-    #                                                                                     "genreId",
-    #                                                                                     "movieId",
-    #                                                                                     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Movie Recommendation Output/log.json")
+    # (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionV3(user1_movie_gen, "genreId",
+    #                                                                                       "movieId", "log.json")
 
     # End Time
+    # No changes to below line
     # end_time = time.time()
 
+    # No changes to below lines
     # time_tuple = time.gmtime(end_time - start_time)
     # print("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)))
 
+    # Below lines for reference
     # average_rating = pd.read_csv(
     #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/average-rating.csv")
 
     # movie_gen.loc[movie_gen["genreId"] == 1]
-    #
+    # movieGenreDAO.searchByGenreID(1)
+
+    # TODO: Implement merge function in averageRatingDAO ( join between AverageRating and MovieGenre )
     # merged_df = average_rating.merge(movie_gen.loc[movie_gen["genreId"] == 1], on="movieId", how="inner")
-    #
+
+    # TODO: Implement sort function for the merged
     # highestRated = merged_df.sort_values("avgRating", ascending=False)
-    #
+
+    # Below lines for reference
     # movies = pd.read_csv(
     #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/movies_out.csv")
-    #
+
+    # TODO: Implement merge function in ratingDAO  ( join between Rating and Movie )
     # highestRated.head(20).merge(movies, on="movieId", how="inner")
 
