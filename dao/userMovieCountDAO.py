@@ -1,12 +1,13 @@
 import json
 import sqlite3
+from typing import List
 from dao.genreDAO import GenreDAO
 from core.userMovieCount import UserMovieCount
 
 class UserMovieCountDAO():
 
     # Constructor
-    def __init__(self, prop_file):
+    def __init__(self, prop_file:str) -> None:
         self.prop_file = prop_file
         # Get DB properties
         with open(prop_file, "r") as prop:
@@ -19,13 +20,13 @@ class UserMovieCountDAO():
         print(f"DB connection successfull to {dbURL}")
 
     # Destructor
-    def __del__(self):
+    def __del__(self) -> None:
         self.myConn.close()
 
     # Return a list of UserMovieCount objects
     # containing all the rows present in the
     # user_movie_genre_wise_count table
-    def getAllUserMovieCounts(self):
+    def getAllUserMovieCounts(self) -> List[UserMovieCount]:
         output = []
 
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
@@ -38,7 +39,7 @@ class UserMovieCountDAO():
     # Return a list of UserMovieCount objects
     # containing rows which have userId and genreId
     # column same as the argument
-    def searchByUserIDGenreID(self, userId, genreId):
+    def searchByUserIDGenreID(self, userId:int, genreId:int) -> List[UserMovieCount]:
         gdDAO = GenreDAO(self.prop_file)
 
         # Obtaining the genreName from genreId
@@ -50,7 +51,7 @@ class UserMovieCountDAO():
 
     # Return an integer which is the count of the number
     # of movies watched by userId of genreName
-    def searchByUserIDGenreName(self, userId, genreName):
+    def searchByUserIDGenreName(self, userId:int, genreName:str) -> int:
         row = self.myConn.execute(f"SELECT userId, {genreName} FROM {self.tableName} WHERE userId = {userId}").fetchone()
 
         return row[1]
@@ -58,7 +59,7 @@ class UserMovieCountDAO():
     # Returns a list of UserMovieCount objects
     # containing rows which have userId column
     # same as the argument
-    def searchByUserID(self, userId):
+    def searchByUserID(self, userId:int) -> List[UserMovieCount]:
         output = []
 
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE userId = {userId}")
@@ -70,7 +71,7 @@ class UserMovieCountDAO():
 
     # Return a UserMovieCount object by converting
     # a row list of SQLite to UserMovieCount(userId, Action, ...)
-    def convertRowToUserMovieCount(self, row):
+    def convertRowToUserMovieCount(self, row) -> UserMovieCount:
         userId = row[0]
         Action = row[1]
         Adventure = row[2]
@@ -94,6 +95,7 @@ class UserMovieCountDAO():
 
         return UserMovieCount(userId, Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama,
                               Fantasy, FilmNoir, Horror, IMAX, Musical, Mystery, Romance, SciFi, Thriller, War, Western)
+
 
 if __name__ == "__main__":
     dao = UserMovieCountDAO("../config/db_properties.json")
