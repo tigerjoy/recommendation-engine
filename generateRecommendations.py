@@ -109,5 +109,41 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
             print("The genre list is {}".format(genreList))
     return (combination_num, largestIntersectionMovieCount, largestIntersection)
 
+
 if __name__ == "__main__":
-    pass
+    ratingDAO = RatingDAO("C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json")
+    # Start Time
+    # No changes to below line
+    # start_time = time.time()
+
+    # user1_movies = ratings[ratings["userId"] == 1]["movieId"]
+    # user1_movies =
+    # To select only those rows where movieId belongs to user1_movies
+    # user1_movie_gen = movie_gen.loc[movie_gen["movieId"].isin(user1_movies)]
+
+    # Calling the method to perform intersection
+    # (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionV2(user1_movie_gen,
+    #                                                                                     "genreId",
+    #                                                                                     "movieId",
+    #                                                                                     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Movie Recommendation Output/log.json")
+
+    # End Time
+    # end_time = time.time()
+
+    # time_tuple = time.gmtime(end_time - start_time)
+    # print("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)))
+
+    # average_rating = pd.read_csv(
+    #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/average-rating.csv")
+
+    # movie_gen.loc[movie_gen["genreId"] == 1]
+    #
+    # merged_df = average_rating.merge(movie_gen.loc[movie_gen["genreId"] == 1], on="movieId", how="inner")
+    #
+    # highestRated = merged_df.sort_values("avgRating", ascending=False)
+    #
+    # movies = pd.read_csv(
+    #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/movies_out.csv")
+    #
+    # highestRated.head(20).merge(movies, on="movieId", how="inner")
+
