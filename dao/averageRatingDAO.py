@@ -36,6 +36,38 @@ class AverageRatingDAO():
         return output
 
     # Return a list of AverageRating objects
+    # containing only those rows for movies
+    # belonging to genreIds argument
+    # Uses the movie_info VIEW which is a join
+    # between tables average_rating and movie_gen
+    def selectFromJoin(self, genreIds: List[int], ascending: bool) -> List[AverageRating]:
+        # Forming the SQL query
+        order = "ASC" if ascending else "DESC";
+        column_name = "genreId"
+        genre_comma_seperated = "( " + str(genreIds[0])
+        genreIds_length = len(genreIds)
+        for i in range(1, genreIds_length):
+            genre_comma_seperated += ", {}".format(genreIds[i])
+        genre_comma_seperated += " )"
+        query = '''
+            SELECT movieId, avgRating
+            FROM movie_info
+            WHERE {0} IN {1}
+            EXCEPT
+            SELECT movieId, avgRating
+            FROM movie_info
+            WHERE {0} NOT IN {1}
+            ORDER BY avgRating {2}; 
+        '''.format(column_name, genre_comma_seperated, order)
+        # print(query)
+        cursor = self.myConn.execute(query)
+        # Generating output list
+        output = []
+        for row in cursor:
+            output.append(self.convertRowToAverageRating(row))
+        return output
+
+    # Return a list of AverageRating objects
     # containing rows which have the movieId
     # column same as the argument
     def searchByMovieID(self, movieId:int) -> List[AverageRating]:
@@ -47,11 +79,11 @@ class AverageRatingDAO():
 
     # Return a Rating object by converting
     # a row list of SQLite to AverageRating(movieId, avgRating)
-    def convertRowToAverageRating(self, row) -> AverageRating:
+    def convertRowToAverageRating(self, row, is_join_operation:bool = False) -> AverageRating:
         movieId = row[0]
         avgRating = row[1]
 
-        return AverageRating(movieId, avgRating)
+        return AverageRating(movieId, avgRating);
 
 
 if __name__ == "__main__":
@@ -61,6 +93,9 @@ if __name__ == "__main__":
     # for row in table:
     #     print(row.getMovieID(), row.getAverageRating())
 
-    result = dao.searchByMovieID(22)
-    for row in result:
-        print(row.getAverageRating())
+    for row in dao.selectFromJoin([1, 2], False):
+        print(row)
+
+    # result = dao.searchByMovieID(22)
+    # for row in result:
+    #     print(row.getAverageRating())
