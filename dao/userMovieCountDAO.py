@@ -22,6 +22,9 @@ class UserMovieCountDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of UserMovieCount objects
+    # containing all the rows present in the
+    # user_movie_genre_wise_count table
     def getAllUserMovieCounts(self):
         output = []
 
@@ -32,6 +35,9 @@ class UserMovieCountDAO():
 
         return output
 
+    # Return a list of UserMovieCount objects
+    # containing rows which have userId and genreId
+    # column same as the argument
     def searchByUserIDGenreID(self, userId, genreId):
         gdDAO = GenreDAO(self.prop_file)
 
@@ -42,12 +48,16 @@ class UserMovieCountDAO():
 
         return row[1]
 
+    # Return an integer which is the count of the number
+    # of movies watched by userId of genreName
     def searchByUserIDGenreName(self, userId, genreName):
         row = self.myConn.execute(f"SELECT userId, {genreName} FROM {self.tableName} WHERE userId = {userId}").fetchone()
 
         return row[1]
 
-    # Returns an UserMovieCount object
+    # Returns a list of UserMovieCount objects
+    # containing rows which have userId column
+    # same as the argument
     def searchByUserID(self, userId):
         output = []
 
@@ -58,6 +68,8 @@ class UserMovieCountDAO():
 
         return output
 
+    # Return a UserMovieCount object by converting
+    # a row list of SQLite to UserMovieCount(userId, Action, ...)
     def convertRowToUserMovieCount(self, row):
         userId = row[0]
         Action = row[1]
@@ -80,7 +92,8 @@ class UserMovieCountDAO():
         War = row[18]
         Western = row[19]
 
-        return UserMovieCount(userId, Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama, Fantasy, FilmNoir, Horror, IMAX, Musical, Mystery, Romance, SciFi, Thriller, War, Western)
+        return UserMovieCount(userId, Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama,
+                              Fantasy, FilmNoir, Horror, IMAX, Musical, Mystery, Romance, SciFi, Thriller, War, Western)
 
 if __name__ == "__main__":
     dao = UserMovieCountDAO("../config/db_properties.json")
@@ -90,4 +103,7 @@ if __name__ == "__main__":
     # for row in table:
     #     print(row)
 
-    print(dao.searchByUserID(1)[0])
+    # print(dao.searchByUserIDGenreName(1, "Action"))
+
+    for user in dao.searchByUserID(1):
+        print(user)

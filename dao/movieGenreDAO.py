@@ -21,6 +21,8 @@ class MovieGenreDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of MovieGenre objects
+    # containing all the rows present in the movie_gen table
     def getAllMovieGenres(self):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
@@ -29,6 +31,9 @@ class MovieGenreDAO():
 
         return output
 
+    # Return a list of MovieGenre objects
+    # containing rows which have the genreId
+    # column same as the argument
     def searchByGenreID(self, genreId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE genreId = {genreId}")
@@ -36,6 +41,9 @@ class MovieGenreDAO():
             output.append(self.convertRowToMovieGenre(row))
         return output
 
+    # Return a list of MovieGenre objects
+    # containing rows which have the movieId
+    # column same as the argument
     def searchByMovieID(self, movieId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE movieId = {movieId}")
@@ -43,7 +51,21 @@ class MovieGenreDAO():
             output.append(self.convertRowToMovieGenre(row))
         return output
 
+    # Return a list of MovieGenre objects
+    # containing rows which have the movieId
+    # column same as the argument list
+    def searchByUserRatingList(self, ratingList):
+        output = []
 
+        for rating in ratingList:
+            movie_genres = self.searchByMovieID(rating.getMovieID())
+            for movieGenre in movie_genres:
+                output.append(movieGenre)
+
+        return output
+
+    # Return a MovieGenre object by converting
+    # a row list of SQLite to MovieGenre(movieId, genreId)
     def convertRowToMovieGenre(self, row):
         movieId = row[0]
         genreId = row[1]
@@ -59,5 +81,17 @@ if __name__ == "__main__":
     # for row in table:
     #     print(row)
 
-    for movie_genre in dao.searchByGenreID(1):
-        print(movie_genre)
+    # for movie_genre in dao.searchByGenreID(1):
+    #     print(movie_genre)
+
+    # for movie_genre in dao.searchByGenreID(1):
+    #     print(movie_genre)
+
+    from core.rating import Rating
+
+    # rating1 = Rating(1, 553, 5.0)
+
+    genres = dao.searchByUserRatingList(dao.searchByGenreID(1))
+
+    for genre in genres:
+        print(genre)

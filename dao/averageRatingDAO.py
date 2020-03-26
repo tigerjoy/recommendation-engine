@@ -22,6 +22,8 @@ class AverageRatingDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of AverageRating objects
+    # containing all the rows present in the rating table
     def getAllAverageRatings(self):
         output = []
 
@@ -32,6 +34,9 @@ class AverageRatingDAO():
 
         return output
 
+    # Return a list of AverageRating objects
+    # containing rows which have the movieId
+    # column same as the argument
     def searchByMovieID(self, movieId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE movieId = {movieId}")
@@ -39,7 +44,8 @@ class AverageRatingDAO():
             output.append(self.convertRowToAverageRating(row))
         return output
 
-
+    # Return a Rating object by converting
+    # a row list of SQLite to AverageRating(movieId, avgRating)
     def convertRowToAverageRating(self, row):
         movieId = row[0]
         avgRating = row[1]

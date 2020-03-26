@@ -21,16 +21,19 @@ class GenreDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of Genre objects
+    # containing all the rows present in the
+    # genid_gen table
     def getAllGenres(self):
         output = []
-
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
-
         for row in cursor:
             output.append(self.convertRowToGenre(row))
-
         return output
 
+    # Return a list of Genre objects
+    # containing rows which have the genreId
+    # column same as the argument
     def searchByGenreID(self, genreId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE genreId = {genreId}")
@@ -38,6 +41,9 @@ class GenreDAO():
             output.append(self.convertRowToGenre(row))
         return output
 
+    # Return a list of Genre objects
+    # containing rows which have the genreName
+    # column same as the argument
     def searchByGenreName(self, genreName):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE genreName = {genreName}")
@@ -45,7 +51,8 @@ class GenreDAO():
             output.append(self.convertRowToGenre(row))
         return output
 
-
+    # Return a Genre object by converting
+    # a row list of SQLite to Genre(genreId, genreName)
     def convertRowToGenre(self, row):
         genreId = row[0]
         genreName = row[1]

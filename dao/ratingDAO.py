@@ -2,14 +2,6 @@ import json
 import sqlite3
 from core.rating import Rating
 
-# Below import gives problem while running
-# ratingDAO.py
-# from .core.rating import Rating
-
-# Below import gives problem while running
-# ratingDAO.py
-# from dao.core.rating import Rating
-
 class RatingDAO():
 
     # Constructor
@@ -29,14 +21,18 @@ class RatingDAO():
     def __del__(self):
         self.myConn.close()
 
+    # Return a list of Rating objects
+    # containing all the rows present in the rating table
     def getAllRating(self):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
         for row in cursor:
             output.append(self.convertRowToRating(row))
-
         return output
 
+    # Return a list of Rating objects
+    # containing rows which have the movieId
+    # column same as the argument
     def searchByMovieID(self, movieId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE movieId = {movieId}")
@@ -44,6 +40,9 @@ class RatingDAO():
             output.append(self.convertRowToRating(row))
         return output
 
+    # Return a list of Rating objects
+    # containing rows which have the userId
+    # column same as the argument
     def searchByUserID(self, userId):
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE userId = {userId}")
@@ -51,6 +50,8 @@ class RatingDAO():
             output.append(self.convertRowToRating(row))
         return output
 
+    # Return a Rating object by converting
+    # a row list of SQLite to Rating(userId, movieId, rating)
     def convertRowToRating(self, row):
         userId = row[0]
         movieId = row[1]
