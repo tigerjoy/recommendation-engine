@@ -1,4 +1,11 @@
 class Genre:
+
+    # Non-Parameterized Constructor
+    def __init__(self):
+        self.genreId = None
+        self.genreName = None
+
+    # Parameterized Constructor
     def __init__(self, genreId:int, genreName:str) -> None:
         self.genreId = genreId
         self.genreName = genreName

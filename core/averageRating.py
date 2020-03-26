@@ -1,6 +1,11 @@
 class AverageRating:
 
-    # Constructor
+    # Non-Parameterized Constructor
+    def __init__(self):
+        self.movieId = None
+        self.avgRating = None
+
+    # Parameterized Constructor
     def __init__(self, movieId:int, avgRating:float) -> None:
         self.movieId = movieId
         self.avgRating = avgRating
