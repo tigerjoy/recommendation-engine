@@ -1,9 +1,13 @@
+from core.movieGenre import MovieGenre
+
+
 class AverageRating:
 
     # Parameterized Constructor
-    def __init__(self, movieId: int = None, avgRating: float = None) -> None:
+    def __init__(self, movieId: int = None, avgRating: float = None, genreId: int = None) -> None:
         self.movieId = movieId
         self.avgRating = avgRating
+        self.movieGenre = MovieGenre(movieId, genreId)
 
     def getMovieID(self) -> int:
         return self.movieId
