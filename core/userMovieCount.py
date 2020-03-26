@@ -1,5 +1,7 @@
 class UserMovieCount:
-    def __init__(self, userId, Action, Adventure, Animation, Children, Comedy, Crime, Documentary, Drama, Fantasy, FilmNoir, Horror, IMAX, Musical, Mystery, Romance, SciFi, Thriller, War, Western):
+    def __init__(self, userId:int, Action:int, Adventure:int, Animation:int, Children:int, Comedy:int, Crime:int,
+                 Documentary:int, Drama:int, Fantasy:int, FilmNoir:int, Horror:int, IMAX:int, Musical:int, Mystery:int,
+                 Romance:int, SciFi:int, Thriller:int, War:int, Western:int):
         self.userId = userId
         self.Action = Action
         self.Adventure = Adventure
@@ -21,127 +23,127 @@ class UserMovieCount:
         self.War = War
         self.Western = Western
 
-    def getUserID(self):
+    def getUserID(self) -> int:
         return self.userId
 
-    def getActionCount(self):
+    def getActionCount(self) -> int:
         return self.Action
 
-    def getAdventureCount(self):
+    def getAdventureCount(self) -> int:
         return self.Adventure
 
-    def getAnimationCount(self):
+    def getAnimationCount(self) -> int:
         return self.Animation
 
-    def getChildrenCount(self):
+    def getChildrenCount(self) -> int:
         return self.Children
 
-    def getComedyCount(self):
+    def getComedyCount(self) -> int:
         return self.Comedy
 
-    def getCrimeCount(self):
+    def getCrimeCount(self) -> int:
         return self.Crime
 
-    def getDocumentaryCount(self):
+    def getDocumentaryCount(self) -> int:
         return self.Documentary
 
-    def getDramaCount(self):
+    def getDramaCount(self) -> int:
         return self.Drama
 
-    def getFantasyCount(self):
+    def getFantasyCount(self) -> int:
         return self.Fantasy
 
-    def getFilmNoirCount(self):
+    def getFilmNoirCount(self) -> int:
         return self.FilmNoir
 
-    def getHorrorCount(self):
+    def getHorrorCount(self) -> int:
         return self.Horror
 
-    def getIMAXCount(self):
+    def getIMAXCount(self) -> int:
         return self.IMAX
 
-    def getMusicalCount(self):
+    def getMusicalCount(self) -> int:
         return self.Musical
 
-    def getMysteryCount(self):
+    def getMysteryCount(self) -> int:
         return self.Mystery
 
-    def getRomanceCount(self):
+    def getRomanceCount(self) -> int:
         return self.Romance
 
-    def getSciFiCount(self):
+    def getSciFiCount(self) -> int:
         return self.SciFi
 
-    def getThrillerCount(self):
+    def getThrillerCount(self) -> int:
         return self.Thriller
 
-    def getWarCount(self):
+    def getWarCount(self) -> int:
         return self.War
 
-    def getWesternCount(self):
+    def getWesternCount(self) -> int:
         return self.Western
 
-    def setUserID(self, userId):
+    def setUserID(self, userId:int) -> None:
         self.userId = userId
 
-    def setActionCount(self, Action):
+    def setActionCount(self, Action:int) -> None:
         self.Action = Action
 
-    def setAdventureCount(self, Adventure):
+    def setAdventureCount(self, Adventure:int) -> None:
         self.Adventure = Adventure
 
-    def setAnimationCount(self, Animation):
+    def setAnimationCount(self, Animation:int) -> None:
         self.Animation = Animation
 
-    def setChildrenCount(self, Children):
+    def setChildrenCount(self, Children:int) -> None:
         self.Children = Children
 
-    def setComedyCount(self, Comedy):
+    def setComedyCount(self, Comedy:int) -> None:
         self.Comedy = Comedy
 
-    def setCrimeCount(self, Crime):
+    def setCrimeCount(self, Crime:int) -> None:
         self.Crime = Crime
 
-    def setDocumentaryCount(self, Documentary):
+    def setDocumentaryCount(self, Documentary:int) -> None:
         self.Documentary = Documentary
 
-    def setDramaCount(self, Drama):
+    def setDramaCount(self, Drama:int) -> None:
         self.Drama = Drama
 
-    def setFantasyCount(self, Fantasy):
+    def setFantasyCount(self, Fantasy:int) -> None:
         self.Fantasy = Fantasy
 
-    def setFilmNoirCount(self, FilmNoir):
+    def setFilmNoirCount(self, FilmNoir:int) -> None:
         self.FilmNoir = FilmNoir
 
-    def setHorrorCount(self, Horror):
+    def setHorrorCount(self, Horror:int) -> None:
         self.Horror = Horror
 
-    def setIMAXCount(self, IMAX):
+    def setIMAXCount(self, IMAX:int) -> None:
         self.IMAX = IMAX
 
-    def setMusicalCount(self, Musical):
+    def setMusicalCount(self, Musical:int) -> None:
         self.Musical = Musical
 
-    def setMysteryCount(self, Mystery):
+    def setMysteryCount(self, Mystery:int) -> None:
         self.Mystery = Mystery
 
-    def setRomanceCount(self, Romance):
+    def setRomanceCount(self, Romance:int) -> None:
         self.Romance = Romance
 
-    def setSciFiCount(self, SciFi):
+    def setSciFiCount(self, SciFi:int) -> None:
         self.SciFi = SciFi
 
-    def setThrillerCount(self, Thriller):
+    def setThrillerCount(self, Thriller:int) -> None:
         self.Thriller = Thriller
 
-    def setWarCount(self, War):
+    def setWarCount(self, War:int) -> None:
         self.War = War
 
-    def setWesternCount(self, Western):
+    def setWesternCount(self, Western:int) -> None:
         self.Western = Western
 
-    def __str__(self):
+    def __str__(self) -> str:
         return  'User ID: {}'.format(self.getUserID()) + \
                 '\nAction: {}'.format(self.getActionCount()) + \
                 '\nAdventure: {}'.format(self.getAdventureCount()) + \
@@ -162,6 +164,7 @@ class UserMovieCount:
                 '\nThriller: {}'.format(self.getThrillerCount()) + \
                 '\nWar: {}'.format(self.getWarCount()) + \
                 '\nWestern: {}'.format(self.getWesternCount())
+
 
 if __name__ == "__main__":
     pass

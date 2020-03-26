@@ -1,24 +1,25 @@
 class AverageRating:
 
     # Constructor
-    def __init__(self, movieId, avgRating):
+    def __init__(self, movieId:int, avgRating:float) -> None:
         self.movieId = movieId
         self.avgRating = avgRating
 
-    def getMovieID(self):
+    def getMovieID(self) -> int:
         return self.movieId
 
-    def getAverageRating(self):
+    def getAverageRating(self) -> float:
         return self.avgRating
 
-    def setMovieID(self, movieId):
+    def setMovieID(self, movieId:int) -> None:
         self.movieId = movieId
 
-    def setAverageRating(self, avgRating):
+    def setAverageRating(self, avgRating:float) -> None:
         self.avgRating = avgRating
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Movie ID: {self.getMovieID()}, Average Rating: {self.getAverageRating()}"
+
 
 if __name__ == "__main__":
     obj = AverageRating(1, 3.4)

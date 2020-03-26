@@ -1,11 +1,13 @@
 import json
 import sqlite3
+from typing import List
+from core.rating import Rating
 from core.movieGenre import MovieGenre
 
 class MovieGenreDAO():
 
     # Constructor
-    def __init__(self, prop_file):
+    def __init__(self, prop_file:str) -> None:
         self.prop_file = prop_file
         # Get DB properties
         with open(prop_file, "r") as prop:
@@ -18,12 +20,12 @@ class MovieGenreDAO():
         print(f"DB connection successfull to {dbURL}")
 
     # Destructor
-    def __del__(self):
+    def __del__(self) -> None:
         self.myConn.close()
 
     # Return a list of MovieGenre objects
     # containing all the rows present in the movie_gen table
-    def getAllMovieGenres(self):
+    def getAllMovieGenres(self) -> List[MovieGenre]:
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
         for row in cursor:
@@ -34,7 +36,7 @@ class MovieGenreDAO():
     # Return a list of MovieGenre objects
     # containing rows which have the genreId
     # column same as the argument
-    def searchByGenreID(self, genreId):
+    def searchByGenreID(self, genreId:int) -> List[MovieGenre]:
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE genreId = {genreId}")
         for row in cursor:
@@ -44,7 +46,7 @@ class MovieGenreDAO():
     # Return a list of MovieGenre objects
     # containing rows which have the movieId
     # column same as the argument
-    def searchByMovieID(self, movieId):
+    def searchByMovieID(self, movieId:int) -> List[MovieGenre]:
         output = []
         cursor = self.myConn.execute(f"SELECT * FROM {self.tableName} WHERE movieId = {movieId}")
         for row in cursor:
@@ -54,7 +56,7 @@ class MovieGenreDAO():
     # Return a list of MovieGenre objects
     # containing rows which have the movieId
     # column same as the argument list
-    def searchByUserRatingList(self, ratingList):
+    def searchByUserRatingList(self, ratingList:List[Rating]) -> List[MovieGenre]:
         output = []
 
         for rating in ratingList:
@@ -66,12 +68,11 @@ class MovieGenreDAO():
 
     # Return a MovieGenre object by converting
     # a row list of SQLite to MovieGenre(movieId, genreId)
-    def convertRowToMovieGenre(self, row):
+    def convertRowToMovieGenre(self, row) -> MovieGenre:
         movieId = row[0]
         genreId = row[1]
-
-
         return MovieGenre(movieId, genreId)
+
 
 if __name__ == "__main__":
     dao = MovieGenreDAO("../config/db_properties.json")
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     # for movie_genre in dao.searchByGenreID(1):
     #     print(movie_genre)
 
-    from core.rating import Rating
+    from core.rating import Rating, Rating, Rating, Rating
 
     # rating1 = Rating(1, 553, 5.0)
 
