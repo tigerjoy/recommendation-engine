@@ -1,0 +1,1 @@
+CONFIG_FILE_PATH = 'C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json'
