@@ -12,12 +12,12 @@ class AverageRatingDAO():
         with open(prop_file, "r") as prop:
             content = json.loads(prop.read())
             dbURL = content["AverageRating"]["dbURL"]
-            print("DBURL =", dbURL)
+            # print("DBURL =", dbURL)
             self.tableName = content["AverageRating"]["tableName"]
         # Connect to the database
         self.myConn = sqlite3.connect(dbURL)
 
-        print(f"DB connection successfull to {dbURL}")
+        # print(f"DB connection successfull to {dbURL}")
 
     # Destructor
     def __del__(self) -> None:

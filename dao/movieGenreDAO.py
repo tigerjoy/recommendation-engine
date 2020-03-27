@@ -17,7 +17,7 @@ class MovieGenreDAO():
         # Connect to the database
         self.myConn = sqlite3.connect(dbURL)
 
-        print(f"DB connection successfull to {dbURL}")
+        # print(f"DB connection successfull to {dbURL}")
 
     # Destructor
     def __del__(self) -> None:
