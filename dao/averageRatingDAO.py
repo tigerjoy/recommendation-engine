@@ -50,11 +50,11 @@ class AverageRatingDAO():
             genre_comma_seperated += ", {}".format(genreIds[i])
         genre_comma_seperated += " )"
         query = '''
-            SELECT movieId, avgRating
+            SELECT DISTINCT movieId, avgRating
             FROM movie_info
             WHERE {0} IN {1}
             EXCEPT
-            SELECT movieId, avgRating
+            SELECT DISTINCT movieId, avgRating
             FROM movie_info
             WHERE {0} NOT IN {1}
             ORDER BY avgRating {2}; 
