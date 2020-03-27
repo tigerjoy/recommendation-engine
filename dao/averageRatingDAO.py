@@ -36,6 +36,41 @@ class AverageRatingDAO():
         return output
 
     # Return a list of AverageRating objects
+    # for those movies which belong to genreIds
+    # and have not been seen by user with userId argument
+    # Uses the movie_info as well as the user_movie_info VIEWS
+    def moviesNotSeenByUser(self, genreIds: List[int], userId: int, ascending: bool):
+        # Forming the SQL query
+        order = "ASC" if ascending else "DESC";
+        column_name = "genreId"
+        genre_comma_seperated = "( " + str(genreIds[0])
+        genreIds_length = len(genreIds)
+        for i in range(1, genreIds_length):
+            genre_comma_seperated += ", {}".format(genreIds[i])
+        genre_comma_seperated += " )"
+        query = '''
+            SELECT DISTINCT movieId, avgRating
+            FROM movie_info
+            WHERE genreId IN {0}
+            EXCEPT
+            SELECT DISTINCT movieId, avgRating
+            FROM movie_info
+            WHERE genreId NOT IN {0}
+            EXCEPT
+            SELECT movieId, avgRating
+            FROM user_movie_info
+            WHERE userId = {1}
+            ORDER BY avgRating {2};
+        '''.format(genre_comma_seperated, userId, order)
+        # print(query)
+        cursor = self.myConn.execute(query)
+        # Generating output list
+        output = []
+        for row in cursor:
+            output.append(self.convertRowToAverageRating(row))
+        return output
+
+    # Return a list of AverageRating objects
     # containing only those rows for movies
     # belonging to genreIds argument
     # Uses the movie_info VIEW which is a join
@@ -93,8 +128,10 @@ if __name__ == "__main__":
     # for row in table:
     #     print(row.getMovieID(), row.getAverageRating())
 
-    for row in dao.selectFromJoin([1, 2], False):
-        print(row)
+    dao.moviesNotSeenByUser([3, 2, 4], 5, False);
+
+    # for row in dao.selectFromJoin([1, 2], False):
+    #     print(row)
 
     # result = dao.searchByMovieID(22)
     # for row in result:
