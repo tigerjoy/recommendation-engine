@@ -1,9 +1,8 @@
 import json
+import constant_paths
 from dao.ratingDAO import RatingDAO
 from dao.movieGenreDAO import MovieGenreDAO
 from dao.averageRatingDAO import AverageRatingDAO
-
-CONFIG_FILE_PATH = "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\config\\db_properties.json"
 
 def readJSON(filename):
     with open(filename) as json_file:
@@ -115,9 +114,9 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
 
 
 if __name__ == "__main__":
-    ratingDAO = RatingDAO(CONFIG_FILE_PATH)
-    movieGenreDAO = MovieGenreDAO(CONFIG_FILE_PATH)
-    averageRatingDAO = AverageRatingDAO(CONFIG_FILE_PATH)
+    ratingDAO = RatingDAO(constant_paths.CONFIG_FILE_PATH)
+    movieGenreDAO = MovieGenreDAO(constant_paths.CONFIG_FILE_PATH)
+    averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
     # Start Time
     # No changes to below line
     # start_time = time.time()
