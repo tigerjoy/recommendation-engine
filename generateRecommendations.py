@@ -1,5 +1,6 @@
 import json
 import constant_paths
+from dao.movieDAO import MovieDAO
 from dao.ratingDAO import RatingDAO
 from dao.movieGenreDAO import MovieGenreDAO
 from dao.averageRatingDAO import AverageRatingDAO
@@ -117,6 +118,7 @@ if __name__ == "__main__":
     ratingDAO = RatingDAO(constant_paths.CONFIG_FILE_PATH)
     movieGenreDAO = MovieGenreDAO(constant_paths.CONFIG_FILE_PATH)
     averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
     # Start Time
     # No changes to below line
     # start_time = time.time()
@@ -149,7 +151,13 @@ if __name__ == "__main__":
 
     # merged_df = average_rating.merge(movie_gen.loc[(movie_gen["genreId"] == 2) & (movie_gen["genreId"] == 1)],
     #                                                                                   on="movieId", how="inner")
-    user1_most_liked_movies = averageRatingDAO.selectFromJoin([1, 2], False)
+    # user1_most_liked_movies = averageRatingDAO.selectFromJoin([1, 2], False)
+    user1_recommended_movies = averageRatingDAO.moviesNotSeenByUser([1, 2], 1, False)
+
+    # Displaying the movies not seen by user1
+    for i in range(20):
+        movie_id = user1_recommended_movies[i].getMovieID()
+        print(movieDAO.searchByMovieID(movie_id)[0])
     # SELECT movie_gen.movieId, avgRating, genreId
     # FROM average_rating INNER JOIN ON average_rating.movieId = movie_gen.movieId
     # WHERE genreId = 1;
@@ -171,6 +179,7 @@ if __name__ == "__main__":
     # movies = pd.read_csv(
     #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/movies_out.csv")
 
-    # TODO: Implement merge function in ratingDAO  ( join between Rating and Movie )
     # highestRated.head(20).merge(movies, on="movieId", how="inner")
 
+    # for i in range(20):
+    #     print(movieDAO.searchByMovieID()[0])
