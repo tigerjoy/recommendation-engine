@@ -48,20 +48,28 @@ class AverageRatingDAO():
         for i in range(1, genreIds_length):
             genre_comma_seperated += ", {}".format(genreIds[i])
         genre_comma_seperated += " )"
-        query = '''
-            SELECT DISTINCT movieId, avgRating
-            FROM movie_info
-            WHERE genreId IN {0}
-            EXCEPT
-            SELECT DISTINCT movieId, avgRating
-            FROM movie_info
-            WHERE genreId NOT IN {0}
-            EXCEPT
-            SELECT movieId, avgRating
-            FROM user_movie_info
-            WHERE userId = {1}
-            ORDER BY avgRating {2};
-        '''.format(genre_comma_seperated, userId, order)
+        # Generating intersect query
+        template = '''
+                    SELECT movieId, avgRating
+                    FROM movie_info
+                    WHERE {} = {}
+                '''
+        query_start = ''
+        query_start += template.format(column_name, genreIds[0])
+        for i in range(1, len(genreIds)):
+            query_start += '''
+                    INTERSECT
+                    {}'''.format(template.format(column_name, genreIds[i]))
+        query_end = '''
+                    EXCEPT 
+
+                    SELECT movieId, avgRating
+                    FROM movie_info
+                    WHERE {0} NOT IN {1}
+
+                    ORDER BY avgRating {2};
+                '''.format(column_name, genre_comma_seperated, order)
+        query = query_start + query_end
         # print(query)
         cursor = self.myConn.execute(query)
         # Generating output list
@@ -144,8 +152,13 @@ if __name__ == "__main__":
 
     # dao.selectFromJoin([1, 2, 4], False)
 
-    for row in dao.selectFromJoin([1, 2], False):
+    # for row in dao.selectFromJoin([1, 2], False):
+    #     print(row)
+
+    for row in dao.moviesNotSeenByUser([1, 2], 1, False):
         print(row)
+
+    # print(len(dao.moviesNotSeenByUser([1, 2], 1, False)))
 
     # result = dao.searchByMovieID(22)
     # for row in result:
