@@ -7,6 +7,9 @@ if not os.path.isfile("config/db_properties.json"):
 elif not os.path.isfile("db/all.db"):
     print("FATAL ERROR: Could not locate all.db file.")
     print("Make sure it is located at db/all.db")
+elif not os.path.isfile("constant_paths.py"):
+    print("FATAL ERROR: Could not locate path.py file.")
+    print("Make sure it is located in the same folder as createConfig.py")
 else:
     config_path = os.path.abspath("config/db_properties.json")
     db_path = os.path.abspath("db/all.db")
@@ -24,3 +27,13 @@ else:
         file.truncate()
 
     print("Created config file succesfully!")
+
+    print("Setting up the path file...")
+
+    path_file = os.path.abspath("constant_paths.py")
+
+    with open(path_file, "w") as file:
+        file.write("CONFIG_FILE_PATH = " + repr(config_path))
+        file.truncate()
+
+    print("Created path file succesfully!")
