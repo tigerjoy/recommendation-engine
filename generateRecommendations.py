@@ -240,12 +240,12 @@ if __name__ == "__main__":
 
     # merged_df = average_rating.merge(movie_gen.loc[(movie_gen["genreId"] == 2) & (movie_gen["genreId"] == 1)],
     #                                                                                   on="movieId", how="inner")
-    # user1_most_liked_movies = averageRatingDAO.selectFromJoin([1, 2], False)
-    user1_recommended_movies = averageRatingDAO.moviesNotSeenByUser([1, 2], 1, False)
-
+    movies_from_user1_favourite_genre = averageRatingDAO.selectFromJoin([1, 2], False)
+    user1_seen_movies = averageRatingDAO.moviesSeenByUser([1, 2], 1, False)
+    user1_recommended_movies = set(movies_from_user1_favourite_genre).difference(user1_seen_movies)
     # Displaying the movies not seen by user1
-    for i in range(20):
-        movie_id = user1_recommended_movies[i].getMovieID()
+    for movie in user1_recommended_movies:
+        movie_id = movie.getMovieID()
         print(movieDAO.searchByMovieID(movie_id)[0])
     # SELECT movie_gen.movieId, avgRating, genreId
     # FROM average_rating INNER JOIN ON average_rating.movieId = movie_gen.movieId
