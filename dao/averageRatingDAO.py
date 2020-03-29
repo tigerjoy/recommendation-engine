@@ -38,7 +38,7 @@ class AverageRatingDAO():
     # Return a list of AverageRating objects
     # for those movies which belong to genreIds
     # and have not been seen by user with userId argument
-    # Uses the movie_info as well as the user_movie_info VIEWS
+    # Uses the user_info VIEWS
     def moviesNotSeenByUser(self, genreIds: List[int], userId: int, ascending: bool):
         # Forming the SQL query
         order = "ASC" if ascending else "DESC";
@@ -51,24 +51,24 @@ class AverageRatingDAO():
         # Generating intersect query
         template = '''
                     SELECT movieId, avgRating
-                    FROM movie_info
-                    WHERE {} = {}
+                    FROM user_info
+                    WHERE {} = {} AND userId = {}
                 '''
         query_start = ''
-        query_start += template.format(column_name, genreIds[0])
+        query_start += template.format(column_name, genreIds[0], userId)
         for i in range(1, len(genreIds)):
             query_start += '''
                     INTERSECT
-                    {}'''.format(template.format(column_name, genreIds[i]))
+                    {}'''.format(template.format(column_name, genreIds[i], userId))
         query_end = '''
                     EXCEPT 
 
                     SELECT movieId, avgRating
-                    FROM movie_info
-                    WHERE {0} NOT IN {1}
+                    FROM user_info
+                    WHERE {0} NOT IN {1} AND userId = {2}
 
-                    ORDER BY avgRating {2};
-                '''.format(column_name, genre_comma_seperated, order)
+                    ORDER BY avgRating {3};
+                '''.format(column_name, genre_comma_seperated, userId, order)
         query = query_start + query_end
         # print(query)
         cursor = self.myConn.execute(query)
