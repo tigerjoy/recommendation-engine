@@ -83,7 +83,7 @@ class AverageRatingDAO():
     # belonging to genreIds argument
     # Uses the movie_info VIEW which is a join
     # between tables average_rating and movie_gen
-    def selectFromJoin(self, genreIds: List[int], ascending: bool) -> List[AverageRating]:
+    def moviesFromGenres(self, genreIds: List[int], ascending: bool) -> List[AverageRating]:
         # Forming the SQL query
         order = "ASC" if ascending else "DESC";
         column_name = "genreId"
