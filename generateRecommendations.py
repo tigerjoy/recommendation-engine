@@ -5,6 +5,8 @@ from dao.ratingDAO import RatingDAO
 from dao.movieGenreDAO import MovieGenreDAO
 from dao.averageRatingDAO import AverageRatingDAO
 
+
+# TODO: Implement error handling for non-existing log files for the first run
 def readJSON(filename):
     with open(filename) as json_file:
         json_string = json_file.read()
@@ -21,6 +23,7 @@ def readJSON(filename):
             last_combination = parsed_json["last_combination"]
     return (last_combination, combination_num, common_movie_length, common_genres)
 
+
 def writeJSON(filename, last_combination, combination_num, common_movie_length, common_genres):
     with open(filename, 'w') as json_file:
         json_data = {
@@ -31,9 +34,11 @@ def writeJSON(filename, last_combination, combination_num, common_movie_length, 
         }
         json_file.write(json.dumps(json_data))
 
+
 def writeLog(output, filename):
     with open(filename, "a") as file:
         print(output, file=filename)
+
 
 def readLog(filename):
     try:
@@ -45,7 +50,17 @@ def readLog(filename):
     except:
         print('Something went wrong!')
 
-def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filename=None):
+# TODO: Implement reduction of genre choices by removing genres
+# TODO: Output three sets of genre list, largest, second largest, third largest
+# TODO: Parallelize using multiprocessing module
+# This function is without any optimization
+def largestIntersectionSQL(user_id: int):
+    filename = "log_user_{}".format(user_id)
+    # TODO: Remove the next three lines after finishing this function
+    userMovieList = None
+    genreIdColName = None
+    movieIdColName = None
+
     output_log_file = filename[:filename.index('.')] + "_output.txt"
     start_count = 1
     end_count = (2 ** 19)
@@ -71,6 +86,78 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
             writeLog("Current combination {}".format(count), output_log_file)
             print("Current combination {}".format(count))
 
+        mask = 0b1000000000000000000
+
+        # Populate the genreList
+        # MSB as genre 19 and LSB as genre 1
+        genre = 19
+        for i in range(19):
+            if count & mask:
+                genreList.append(genre)
+            mask >>= 1
+            genre -= 1
+
+        # Finding the common movies falling in all the genres of the genreList
+        common_movies = set({})
+        if len(genreList) == 1:
+            # Implement logic of how to fetch movieIds / MovieGenre obj list
+            # for movies belonging only to 1 genre say seen by user, only Action movies
+            movies_of_genre = userMovieList.loc[userMovieList[genreIdColName] == genreList[0]]
+            movieIds = movies_of_genre["movieId"]
+            common_movies = set(movieIds).difference(
+                set(userMovieList[
+                        userMovieList[movieIdColName].isin(movieIds) & (userMovieList[genreIdColName] != genreList[0])][
+                        movieIdColName].unique()))
+        elif len(genreList) != 0:
+            # logic already implemented searchByGenreID()
+            common_movies = set(userMovieList.loc[
+                                    userMovieList[genreIdColName] == genreList[0]
+                                    ][movieIdColName])
+
+        for index in range(1, len(genreList)):
+            common_movies = common_movies.intersection(set(
+                userMovieList.loc[
+                    userMovieList[genreIdColName] == genreList[index]
+                    ][movieIdColName]))
+
+        # Finding if the current genreList has the highest number of common movies
+        movieCount = len(common_movies)
+        if movieCount > largestIntersectionMovieCount:
+            largestIntersection = genreList.copy()
+            largestIntersectionMovieCount = movieCount
+            combination_num = count
+            writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
+            print("The combination number for the set is {}".format(combination_num))
+            print("The number of common movies are {}".format(largestIntersectionMovieCount))
+            print("The genre list is {}".format(genreList))
+
+
+def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filename=None):
+    # No need to change the below lines
+    output_log_file = filename[:filename.index('.')] + "_output.txt"
+    start_count = 1
+    end_count = (2 ** 19)
+
+    # Read previous output if any
+    readLog(output_log_file)
+
+    # Output
+    combination_num = 0
+    largestIntersectionMovieCount = 0
+    largestIntersection = []
+
+    # Read the backup file to resume processing
+    if filename != None:
+        start_count, combination_num, largestIntersectionMovieCount, largestIntersection = readJSON(filename)
+
+    for count in range(start_count, end_count):
+        genreList = []
+
+        # Write the output after trying every 10,000 combinations
+        if count % 10000 == 0:
+            writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
+            writeLog("Current combination {}".format(count), output_log_file)
+            print("Current combination {}".format(count))
 
         mask = 0b1000000000000000000
 
@@ -89,7 +176,9 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
             movies_of_genre = userMovieList.loc[userMovieList[genreIdColName] == genreList[0]]
             movieIds = movies_of_genre["movieId"]
             common_movies = set(movieIds).difference(
-                set(userMovieList[userMovieList[movieIdColName].isin(movieIds) & (userMovieList[genreIdColName] != genreList[0])][movieIdColName].unique()))
+                set(userMovieList[
+                        userMovieList[movieIdColName].isin(movieIds) & (userMovieList[genreIdColName] != genreList[0])][
+                        movieIdColName].unique()))
         elif len(genreList) != 0:
             common_movies = set(userMovieList.loc[
                                     userMovieList[genreIdColName] == genreList[0]
