@@ -37,9 +37,9 @@ class AverageRatingDAO():
 
     # Return a list of AverageRating objects
     # for those movies which belong to genreIds
-    # and have not been seen by user with userId argument
+    # and have been seen by user with userId argument
     # Uses the user_info VIEWS
-    def moviesNotSeenByUser(self, genreIds: List[int], userId: int, ascending: bool):
+    def moviesSeenByUser(self, genreIds: List[int], userId: int, ascending: bool):
         # Forming the SQL query
         order = "ASC" if ascending else "DESC";
         column_name = "genreId"
