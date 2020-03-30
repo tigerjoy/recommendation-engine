@@ -60,14 +60,15 @@ def readLog(filename):
 # TODO: Output three sets of genre list, largest, second largest, third largest
 # TODO: Parallelize using multiprocessing module
 # This function is without any optimization
-def largestIntersectionSQL(user_id: int):
+def largestIntersectionSQL(user_id: int, verbose: bool = False):
     filename = "log_user_{}.json".format(user_id)
     output_log_file = filename[:filename.index('.')] + "_output.txt"
     start_count = 1
     end_count = (2 ** 19)
 
-    # Read previous output if any
-    readLog(output_log_file)
+    if verbose:
+        # Read previous output if any
+        readLog(output_log_file)
 
     # Output
     combination_num = 0
@@ -85,7 +86,8 @@ def largestIntersectionSQL(user_id: int):
         if count % 10000 == 0:
             writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
             writeLog("Current combination {}".format(count), output_log_file)
-            print("Current combination {}".format(count))
+            if verbose:
+                print("Current combination {}".format(count))
 
         mask = 0b1000000000000000000
 
@@ -107,34 +109,35 @@ def largestIntersectionSQL(user_id: int):
             largestIntersectionMovieCount = movieCount
             combination_num = count
             writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
-            print("The combination number for the set is {}".format(combination_num))
             writeLog("The combination number for the set is {}".format(combination_num), output_log_file)
-            print("The number of common movies are {}".format(largestIntersectionMovieCount))
             writeLog("The number of common movies are {}".format(largestIntersectionMovieCount), output_log_file)
-            print("The genre list is {}".format(genreList))
             writeLog("The genre list is {}".format(genreList), output_log_file)
+            if verbose:
+                print("The combination number for the set is {}".format(combination_num))
+                print("The number of common movies are {}".format(largestIntersectionMovieCount))
+                print("The genre list is {}".format(genreList))
 
-    # Final output
+    # Final output write
     writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
     return combination_num, largestIntersectionMovieCount, largestIntersection
 
-def generateRecommendations(user_id: int) -> None:
+def generateRecommendations(user_id: int, verbose: bool = False) -> None:
     start_time = time.time()
-    (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(1)
-    output_log_file = "log_user_{}_output.txt".format(user_id)
-
-    print("The final result is")
-    writeLog("The final result is", output_log_file)
-    print("Combination Number: {}".format(combination_num))
-    writeLog("The final result is", output_log_file)
-    print("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount))
-    writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
-    print("Genre List: {}".format(genreList))
-    writeLog("Genre List: {}".format(genreList), output_log_file)
+    (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(user_id)
     end_time = time.time()
     time_tuple = time.gmtime(end_time - start_time)
-    print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
+    output_log_file = "log_user_{}_output.txt".format(user_id)
+    writeLog("The final result is", output_log_file)
+    writeLog("The final result is", output_log_file)
+    writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
+    writeLog("Genre List: {}".format(genreList), output_log_file)
     writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
+    if verbose:
+        print("The final result is")
+        print("Combination Number: {}".format(combination_num))
+        print("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount))
+        print("Genre List: {}".format(genreList))
+        print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
 
     averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
     movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
@@ -145,7 +148,6 @@ def generateRecommendations(user_id: int) -> None:
     for movie in users_recommended_movies:
         movie_id = movie.getMovieID()
         print(movieDAO.searchByMovieID(movie_id)[0])
-
 
 
 if __name__ == "__main__":
