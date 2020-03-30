@@ -1,7 +1,17 @@
 # recommendation-engine
 
-## How to run any .py file present here?
+## What work's and what doesn't?
 
-1. The project only runs without any issues on PyCharm.
-2. The first file, that you must run is createConfig.py to set up the paths.
-3. This does not yet produce any recommendations, needs a lot of fixing.
+1. <strike>The project only runs without any issues on PyCharm.</strike> 
+    It can be run simple from a command prompt.
+2. <strike>The first file, that you must run is createConfig.py to set up the paths.</strike>
+    No need of running this file seperately.
+3. <strike>This does not yet produce any recommendations, needs a lot of fixing.</strike>
+    It does generate recommendations based on the genre(s) for which the user has seen the **maximum** number of movies, and the
+    recommendations are movies from that genre(s) which the user has **not** seen.
+
+## How to generate recommendations?
+
+Generating recommendations is as simple as running the generateRecommendations.py file, and providing it a user id as input. 
+<code>python generateRecommendations.py</code>
+
