@@ -64,3 +64,13 @@ The final result is
 Largest Intersection Movie Count: 7
 Genre List: [15, 5]
 Time taken to perform intersection: 00:16:18
+The final result is
+The final result is
+Largest Intersection Movie Count: 11
+Genre List: [5]
+Time taken to perform intersection: 00:00:00
+The final result is
+The final result is
+Largest Intersection Movie Count: 11
+Genre List: [5]
+Time taken to perform intersection: 00:00:00
