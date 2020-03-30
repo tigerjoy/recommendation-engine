@@ -1,10 +1,7 @@
 import json
 import time
-
 import constant_paths
 from dao.movieDAO import MovieDAO
-from dao.ratingDAO import RatingDAO
-from dao.movieGenreDAO import MovieGenreDAO
 from dao.averageRatingDAO import AverageRatingDAO
 
 
@@ -121,12 +118,11 @@ def largestIntersectionSQL(user_id: int):
     writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
     return combination_num, largestIntersectionMovieCount, largestIntersection
 
-
-if __name__ == "__main__":
-    # Start Time
+def generateRecommendations(user_id: int) -> None:
     start_time = time.time()
     (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(1)
-    output_log_file = "log_user_{}_output.txt".format(1)
+    output_log_file = "log_user_{}_output.txt".format(user_id)
+
     print("The final result is")
     writeLog("The final result is", output_log_file)
     print("Combination Number: {}".format(combination_num))
@@ -135,101 +131,25 @@ if __name__ == "__main__":
     writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
     print("Genre List: {}".format(genreList))
     writeLog("Genre List: {}".format(genreList), output_log_file)
-    # End Time
-    # No changes to below line
     end_time = time.time()
     time_tuple = time.gmtime(end_time - start_time)
     print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
     writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
 
-    # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
-    # movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
+    averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
+    movies_from_users_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
+    users_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id, False)
+    users_recommended_movies = set(movies_from_users_favourite_genre).difference(users_seen_movies)
+    # Displaying the movies not seen by user
+    for movie in users_recommended_movies:
+        movie_id = movie.getMovieID()
+        print(movieDAO.searchByMovieID(movie_id)[0])
+
+
+
+if __name__ == "__main__":
+    user_id = int(input("Enter the user id to generate recommendations: "))
+    generateRecommendations(user_id)
     # for user_id in range(33, 611):
-    #     # Start Time
-    #     start_time = time.time()
-    #     (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(user_id)
-    #     output_log_file = "log_user_{}_output.txt".format(user_id)
-    #     print("The final result is")
-    #     writeLog("The final result is", output_log_file)
-    #     print("Combination Number: {}".format(combination_num))
-    #     writeLog("The final result is", output_log_file)
-    #     print("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount))
-    #     writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
-    #     print("Genre List: {}".format(genreList))
-    #     writeLog("Genre List: {}".format(genreList), output_log_file)
-    #     # End Time
-    #     # No changes to below line
-    #     end_time = time.time()
-    #     time_tuple = time.gmtime(end_time - start_time)
-    #     print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
-    #     writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
 
-    # movies_from_user1_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
-    # user1_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, 1, False)
-    # user1_recommended_movies = set(movies_from_user1_favourite_genre).difference(user1_seen_movies)
-    # # Displaying the movies not seen by user1
-    # for movie in user1_recommended_movies:
-    #     movie_id = movie.getMovieID()
-    #     print(movieDAO.searchByMovieID(movie_id)[0])
-
-    # ratingDAO = RatingDAO(constant_paths.CONFIG_FILE_PATH)
-    # movieGenreDAO = MovieGenreDAO(constant_paths.CONFIG_FILE_PATH)
-
-    # Start Time
-    # No changes to below line
-    # start_time = time.time()
-
-    # user1_movies = ratings[ratings["userId"] == 1]["movieId"]
-    # user1_ratings = ratingDAO.searchByUserID(1)
-    # To select only those rows where movieId belongs to user1_movies
-    # user1_movie_gen = movie_gen.loc[movie_gen["movieId"].isin(user1_movies)]
-    # user1_movie_genre = movieGenreDAO.searchByUserRatingList(user1_ratings)
-
-    # No change (maybe some change)
-    # Calling the method to perform intersection
-    # (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionV3(user1_movie_gen, "genreId",
-    #                                                                                       "movieId", "log.json")
-
-    # End Time
-    # No changes to below line
-    # end_time = time.time()
-
-    # No changes to below lines
-    # time_tuple = time.gmtime(end_time - start_time)
-    # print("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)))
-
-    # Below lines for reference
-    # average_rating = pd.read_csv(
-    #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/average-rating.csv")
-
-    # movie_gen.loc[movie_gen["genreId"] == 1]
-    # movieGenreDAO.searchByGenreID(1)
-
-    # merged_df = average_rating.merge(movie_gen.loc[(movie_gen["genreId"] == 2) & (movie_gen["genreId"] == 1)],
-    #                                                                                   on="movieId", how="inner")
-
-    # SELECT movie_gen.movieId, avgRating, genreId
-    # FROM average_rating INNER JOIN ON average_rating.movieId = movie_gen.movieId
-    # WHERE genreId = 1;
-    # Return format:
-    # JSON
-    # {
-    #     "1":{
-    #         "genres": [2, 3, 4, 5, 9], ( Dont Need the Genre)
-    #         "avgRating": 3.92093023255814
-    #     }
-    # }
-    # OR
-    # Simple Object List is better as we dont need the genre,
-    # The genre information is already available to us
-
-    # highestRated = merged_df.sort_values("avgRating", ascending=False)
-
-    # Below lines for reference
-    # movies = pd.read_csv(
-    #     "/content/drive/My Drive/Research Papers & Useful Links to Datasets/Preprocessed Dataset/movies_out.csv")
-
-    # highestRated.head(20).merge(movies, on="movieId", how="inner")
-
-    # for i in range(20):
-    #     print(movieDAO.searchByMovieID()[0])
