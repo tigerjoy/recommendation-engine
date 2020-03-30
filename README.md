@@ -13,5 +13,8 @@
 ## How to generate recommendations?
 
 Generating recommendations is as simple as running the generateRecommendations.py file, and providing it a user id as input. 
+
 <code>python generateRecommendations.py</code>
+
+**Note** that recommendations are displayed in an instant if the user ids are between 1 and 32, as they have already been generated, where as generating recommendations for other users takes about 20 - 30 minutes.
 
