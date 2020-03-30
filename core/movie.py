@@ -1,29 +1,32 @@
 class Movie:
-    def __init__(self, movieId, title, genres):
+
+    # Parameterized Constructor
+    def __init__(self, movieId:int = None, title:str = None, genres:str = None) -> None:
         self.movieId = movieId
         self.title = title
         self.genres = genres
 
-    def getMovieID(self):
+    def getMovieID(self) -> int:
         return self.movieId
 
-    def getTitle(self):
+    def getTitle(self) -> str:
         return self.title
 
-    def getGenres(self):
+    def getGenres(self) -> str:
         return self.genres
 
-    def setMovieID(self, movieId):
+    def setMovieID(self, movieId:int) -> None:
         self.movieId = movieId
 
-    def setTitle(self, title):
+    def setTitle(self, title:str) -> None:
         self.title = title
 
-    def setGenres(self, genres):
+    def setGenres(self, genres:str) -> None:
         self.genres = genres
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Movie ID: {self.getMovieID()}, Title: {self.getTitle()}, Genres: {self.getGenres()}"
+
 
 if __name__ == "__main__":
     pass

@@ -1,26 +1,26 @@
 {
     "AverageRating": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "average_rating"
     },
     "Genre": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "genid_gen"
     },
     "MovieGenre": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "movie_gen"
     },
     "Movie": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "movies_out"
     },
     "Rating": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "ratings_out"
     },
     "UserMovieCount": {
-        "dbURL": "../db/all.db",
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "user_movie_genre_wise_count"
     }
 }

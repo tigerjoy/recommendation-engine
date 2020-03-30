@@ -1,21 +1,34 @@
 import json
-from dao.ratingDAO import RatingDAO
+import time
+import createConfig
+import constant_paths
+from dao.movieDAO import MovieDAO
+from dao.averageRatingDAO import AverageRatingDAO
 
+
+# TODO: Implement error handling for non-existing log files for the first run
 def readJSON(filename):
-    with open(filename) as json_file:
-        json_string = json_file.read()
-        if json_string == "":
-            last_combination = 0
-            combination_num = 0
-            common_movie_length = 0
-            common_genres = []
-        else:
+    last_combination = 1
+    combination_num = 0
+    common_movie_length = 0
+    common_genres = []
+
+    try:
+        with open(filename) as json_file:
+            json_string = json_file.read()
             parsed_json = json.loads(json_string)
             combination_num = parsed_json['combination_num']
             common_movie_length = parsed_json['common_movie_length']
             common_genres = parsed_json['common_genres']
             last_combination = parsed_json["last_combination"]
-    return (last_combination, combination_num, common_movie_length, common_genres)
+    except FileNotFoundError:
+        # Already assigned value above
+        pass
+    except:
+        print("Something went wrong!")
+
+    return last_combination, combination_num, common_movie_length, common_genres
+
 
 def writeJSON(filename, last_combination, combination_num, common_movie_length, common_genres):
     with open(filename, 'w') as json_file:
@@ -27,9 +40,11 @@ def writeJSON(filename, last_combination, combination_num, common_movie_length, 
         }
         json_file.write(json.dumps(json_data))
 
+
 def writeLog(output, filename):
     with open(filename, "a") as file:
-        print(output, file=filename)
+        print(output, file=file)
+
 
 def readLog(filename):
     try:
@@ -41,13 +56,20 @@ def readLog(filename):
     except:
         print('Something went wrong!')
 
-def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filename=None):
+
+# TODO: Implement reduction of genre choices by removing genres
+# TODO: Output three sets of genre list, largest, second largest, third largest
+# TODO: Parallelize using multiprocessing module
+# This function is without any optimization
+def largestIntersectionSQL(user_id: int, verbose: bool = False):
+    filename = "log_user_{}.json".format(user_id)
     output_log_file = filename[:filename.index('.')] + "_output.txt"
     start_count = 1
     end_count = (2 ** 19)
 
-    # Read previous output if any
-    readLog(output_log_file)
+    if verbose:
+        # Read previous output if any
+        readLog(output_log_file)
 
     # Output
     combination_num = 0
@@ -55,7 +77,7 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
     largestIntersection = []
 
     # Read the backup file to resume processing
-    if filename != None:
+    if filename is not None:
         start_count, combination_num, largestIntersectionMovieCount, largestIntersection = readJSON(filename)
 
     for count in range(start_count, end_count):
@@ -65,8 +87,8 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
         if count % 10000 == 0:
             writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
             writeLog("Current combination {}".format(count), output_log_file)
-            print("Current combination {}".format(count))
-
+            if verbose:
+                print("Current combination {}".format(count))
 
         mask = 0b1000000000000000000
 
@@ -79,35 +101,58 @@ def largestIntersectionV3(userMovieList, genreIdColName, movieIdColName, filenam
             mask >>= 1
             genre -= 1
 
+        averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
-        common_movies = set({})
-        if len(genreList) == 1:
-            movies_of_genre = userMovieList.loc[userMovieList[genreIdColName] == genreList[0]]
-            movieIds = movies_of_genre["movieId"]
-            common_movies = set(movieIds).difference(
-                set(userMovieList[userMovieList[movieIdColName].isin(movieIds) & (userMovieList[genreIdColName] != genreList[0])][movieIdColName].unique()))
-        elif len(genreList) != 0:
-            common_movies = set(userMovieList.loc[
-                                    userMovieList[genreIdColName] == genreList[0]
-                                    ][movieIdColName])
-
-        for index in range(1, len(genreList)):
-            common_movies = common_movies.intersection(set(
-                userMovieList.loc[
-                    userMovieList[genreIdColName] == genreList[index]
-                    ][movieIdColName]))
-
-        # Finding if the current genreList has the highest number of common movies
+        common_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id)
         movieCount = len(common_movies)
         if movieCount > largestIntersectionMovieCount:
             largestIntersection = genreList.copy()
             largestIntersectionMovieCount = movieCount
             combination_num = count
             writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
-            print("The combination number for the set is {}".format(combination_num))
-            print("The number of common movies are {}".format(largestIntersectionMovieCount))
-            print("The genre list is {}".format(genreList))
-    return (combination_num, largestIntersectionMovieCount, largestIntersection)
+            writeLog("The combination number for the set is {}".format(combination_num), output_log_file)
+            writeLog("The number of common movies are {}".format(largestIntersectionMovieCount), output_log_file)
+            writeLog("The genre list is {}".format(genreList), output_log_file)
+            if verbose:
+                print("The combination number for the set is {}".format(combination_num))
+                print("The number of common movies are {}".format(largestIntersectionMovieCount))
+                print("The genre list is {}".format(genreList))
+
+    # Final output write
+    writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
+    return combination_num, largestIntersectionMovieCount, largestIntersection
+
+def generateRecommendations(user_id: int, verbose: bool = False) -> None:
+    start_time = time.time()
+    (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(user_id)
+    end_time = time.time()
+    time_tuple = time.gmtime(end_time - start_time)
+    output_log_file = "log_user_{}_output.txt".format(user_id)
+    writeLog("The final result is", output_log_file)
+    writeLog("The final result is", output_log_file)
+    writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
+    writeLog("Genre List: {}".format(genreList), output_log_file)
+    writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
+    if verbose:
+        print("The final result is")
+        print("Combination Number: {}".format(combination_num))
+        print("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount))
+        print("Genre List: {}".format(genreList))
+        print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
+
+    averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
+    movies_from_users_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
+    users_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id, False)
+    users_recommended_movies = set(movies_from_users_favourite_genre).difference(users_seen_movies)
+    # Displaying the movies not seen by user
+    for movie in users_recommended_movies:
+        movie_id = movie.getMovieID()
+        print(movieDAO.searchByMovieID(movie_id)[0])
+
 
 if __name__ == "__main__":
-    pass
+    user_id = int(input("Enter the user id to generate recommendations: "))
+    generateRecommendations(user_id)
+    # for user_id in range(33, 611):
+
