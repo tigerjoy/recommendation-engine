@@ -1,0 +1,36 @@
+The combination number for the set is 16
+The number of common movies are 4
+The genre list is [5]
+The combination number for the set is 128
+The number of common movies are 31
+The genre list is [8]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000
+Current combination 140000
+Current combination 150000
+Current combination 160000
+Current combination 170000
+Current combination 180000
+Current combination 190000
+Current combination 200000
+Current combination 210000
+Current combination 220000
+Current combination 230000
+Current combination 240000
+Current combination 250000
+Current combination 260000
+Current combination 270000
+Current combination 280000
+Current combination 290000
+Current combination 300000
