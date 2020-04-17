@@ -72,14 +72,9 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     start_count = 1
     end_count = (2 ** 19)
 
-    # if verbose:
-    # Read previous output if any
-    # readLog(output_log_file)
-
-    # Output
-    # combination_num = 0
-    # largestIntersectionMovieCount = 0
-    # largestIntersection = []
+    if verbose:
+        # Read previous output if any
+        readLog(output_log_file)
 
     # New Addition iteration-3
     # Output
