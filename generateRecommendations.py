@@ -9,25 +9,30 @@ from dao.averageRatingDAO import AverageRatingDAO
 
 def readJSON(filename):
     last_combination = 1
-    combination_num = 0
-    common_movie_length = 0
-    common_genres = []
+    result = []
+    recommendation_dict = {"priority": 0, "combination_num": 0,
+                           "common_movie_length": 0, "common_genres": []}
+    for i in range(1, 4):
+        recommendation_dict["priority"] = i
+        result.append(recommendation_dict.copy())
 
     try:
         with open(filename) as json_file:
             json_string = json_file.read()
             parsed_json = json.loads(json_string)
-            combination_num = parsed_json['combination_num']
-            common_movie_length = parsed_json['common_movie_length']
-            common_genres = parsed_json['common_genres']
             last_combination = parsed_json["last_combination"]
+            recommendations = parsed_json["recommendations"]
+            result = []
+            for recommendation in recommendations:
+                result.append(recommendation.copy())
+
     except FileNotFoundError:
         # Already assigned value above
         pass
     except:
         print("Something went wrong!")
 
-    return last_combination, combination_num, common_movie_length, common_genres
+    return last_combination, result.copy()
 
 
 # Modified in iteration-3
@@ -35,7 +40,7 @@ def writeJSON(filename, last_combination, recommendation):
     with open(filename, 'w') as json_file:
         json_data = {
             'last_combination': last_combination,
-            'recommendation': recommendation
+            'recommendations': recommendation
         }
         json_file.write(json.dumps(json_data, indent=4))
 
@@ -76,24 +81,17 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     # largestIntersectionMovieCount = 0
     # largestIntersection = []
 
-    # Read the backup file to resume processing
-    # if filename is not None:
-    #     start_count, combination_num, largestIntersectionMovieCount, largestIntersection = readJSON(filename)
-
     # New Addition iteration-3
-    recommendation_dict = {"priority": 0, "combination_num": 0,
-                           "common_movie_length": 0, "common_genres": []}
-    recommendation = []
-    for i in range(1, 4):
-        recommendation_dict["priority"] = i
-        recommendation.append(recommendation_dict.copy())
+    # Output
+    # Read the backup file to resume processing
+    start_count, recommendations = readJSON(filename)
 
     for count in range(start_count, end_count):
         genreList = []
 
         # Write the output after trying every 10,000 combinations
         if count % 10000 == 0:
-            writeJSON(filename, count, recommendation)
+            writeJSON(filename, count, recommendations)
             writeLog("Current combination {}".format(count), output_log_file)
             if verbose:
                 print("Current combination {}".format(count))
@@ -118,31 +116,31 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
         to_insert = movieCount
         j = 2
         while j >= 0:
-            if to_insert > recommendation[j]["common_movie_length"]:
+            if to_insert > recommendations[j]["common_movie_length"]:
                 #   Shift elements from 0 to j - 1 one position left
                 k = 0
                 while k <= j - 1:
-                    recommendation[k] = recommendation[k + 1].copy()
-                    recommendation[k]["priority"] = k + 1
+                    recommendations[k] = recommendations[k + 1].copy()
+                    recommendations[k]["priority"] = k + 1
                     k += 1
                 # largest[j] = to_insert
-                recommendation[j]["combination_num"] = count
-                recommendation[j]["common_movie_length"] = movieCount
-                recommendation[j]["common_genres"] = genreList.copy()
-                writeJSON(filename, count, recommendation)
+                recommendations[j]["combination_num"] = count
+                recommendations[j]["common_movie_length"] = movieCount
+                recommendations[j]["common_genres"] = genreList.copy()
+                writeJSON(filename, count, recommendations)
                 if verbose:
                     # pp.pprint(recommendation)
-                    print("The priority is {}".format(recommendation[j]["priority"]))
-                    print("The combination number for the set is {}".format(recommendation[j]["combination_num"]))
-                    print("The number of common movies are {}".format(recommendation[j]["common_movie_length"]))
-                    print("The genre list is {}".format(recommendation[j]["common_genres"]))
+                    print("The priority is {}".format(recommendations[j]["priority"]))
+                    print("The combination number for the set is {}".format(recommendations[j]["combination_num"]))
+                    print("The number of common movies are {}".format(recommendations[j]["common_movie_length"]))
+                    print("The genre list is {}".format(recommendations[j]["common_genres"]))
 
-                    writeLog("The priority is {}".format(recommendation[j]["priority"]), output_log_file)
-                    writeLog("The combination number for the set is {}".format(recommendation[j]["combination_num"]),
+                    writeLog("The priority is {}".format(recommendations[j]["priority"]), output_log_file)
+                    writeLog("The combination number for the set is {}".format(recommendations[j]["combination_num"]),
                              output_log_file)
-                    writeLog("The number of common movies are {}".format(recommendation[j]["common_movie_length"]),
+                    writeLog("The number of common movies are {}".format(recommendations[j]["common_movie_length"]),
                              output_log_file)
-                    writeLog("The genre list is {}".format(recommendation[j]["common_genres"]), output_log_file)
+                    writeLog("The genre list is {}".format(recommendations[j]["common_genres"]), output_log_file)
                     print("\n\n\n")
                 break
             j -= 1
@@ -162,9 +160,9 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
         #         print("The genre list is {}".format(genreList))
 
     # Final output write
-    writeJSON(filename, count, recommendation)
+    writeJSON(filename, count, recommendations)
     # return combination_num, largestIntersectionMovieCount, largestIntersection
-    return recommendation
+    return recommendations
 
 
 def generateRecommendations(user_id: int, verbose: bool = False) -> None:
