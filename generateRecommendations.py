@@ -68,25 +68,13 @@ def readLog(filename):
         print('Something went wrong!')
 
 
-def get_non_zero_movie_genres(user_id: int) -> List[int]:
-    genre_info = gumcd.get_genre_wise_movie_count_by_user(user_id)
-    genre_list = []
-    genre_id = 1
-    for genre_count in genre_info.genreCounts:
-        if genre_count > 0:
-            genre_list.append(genre_id)
-        genre_id += 1
-    return genre_list.copy()
-
-
-# TODO: Implement reduction of genre choices by removing genres
 # TODO: Parallelize using multiprocessing module
-# This function is without any optimization
+# This function is with reduced genre optimization
 def largestIntersectionSQL(user_id: int, verbose: bool = False):
     pp = pprint.PrettyPrinter(indent=4)
     filename = "log_user_{}.json".format(user_id)
     output_log_file = filename[:filename.index('.')] + "_output.txt"
-    valid_genres = get_non_zero_movie_genres(user_id)
+    valid_genres = gumcd.get_non_zero_movie_genres(user_id)
     start_count = 1
     # end_count = (2 ** 19)
     end_count = (2 ** len(valid_genres))
@@ -183,43 +171,63 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
 
 def generateRecommendations(user_id: int, verbose: bool = False) -> None:
     start_time = time.time()
-    (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(user_id)
+    # (combination_num, largestIntersectionMovieCount, genreList) = largestIntersectionSQL(user_id)
+    recommendations = largestIntersectionSQL(user_id, verbose)
     end_time = time.time()
     time_tuple = time.gmtime(end_time - start_time)
     output_log_file = "log_user_{}_output.txt".format(user_id)
-    writeLog("The final result is", output_log_file)
-    writeLog("The final result is", output_log_file)
-    writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
-    writeLog("Genre List: {}".format(genreList), output_log_file)
-    writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
+    # writeLog("The final result is", output_log_file)
+    # writeLog("The final result is", output_log_file)
+    # writeLog("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount), output_log_file)
+    # writeLog("Genre List: {}".format(genreList), output_log_file)
+    # writeLog("Time taken to perform intersection: {}".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
     if verbose:
-        print("The final result is")
-        print("Combination Number: {}".format(combination_num))
-        print("Largest Intersection Movie Count: {}".format(largestIntersectionMovieCount))
-        print("Genre List: {}".format(genreList))
         print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
+        print()
+        print()
+        print("The final result is")
+        for recommendation in recommendations:
+            print("Priority: {}".format(recommendation["priority"]))
+            print("Combination Number: {}".format(recommendation["combination_num"]))
+            print("Genre List: {}".format(recommendation["common_genres"]))
+            print("Number of Movies Already Seen By User: {}".format(recommendation["common_movie_length"]))
+            users_recommended_movies = gard.get_movies_of_genres_not_seen_user(
+                                                    recommendation["common_genres"], user_id, False)
+            print("Number of Movies Not Seen By User: {}".format(len(users_recommended_movies)))
+            print()
+            count = 0
+            # Displaying the movies not seen by user (only 10)
+            for movie in users_recommended_movies:
+                count += 1
+                movie_id = movie.getMovieID()
+                # print(movieDAO.searchByMovieID(movie_id)[0])
+                print(get_movie_data.get_movie_by_id(movie_id))
+                if count == 10:
+                    break
+            print("\n" * 3)
 
     # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
     # movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
     # movies_from_users_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
-    movies_from_users_favourite_genre = gard.get_movies_by_genres(genreList, False)
+    # movies_from_users_favourite_genre = gard.get_movies_by_genres(genreList, False)
     # users_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id, False)
-    users_seen_movies = gard.get_movies_of_genres_seen_by_user(genreList, False)
-    users_recommended_movies = set(movies_from_users_favourite_genre).difference(users_seen_movies)
+    # users_seen_movies = gard.get_movies_of_genres_seen_by_user(genreList, user_id, False)
+    # users_recommended_movies = gard.get_movies_of_genres_not_seen_user(recommendation["common_genres"], user_id, False)
     # Displaying the movies not seen by user
-    for movie in users_recommended_movies:
-        movie_id = movie.getMovieID()
+    # for movie in users_recommended_movies:
+    #     movie_id = movie.getMovieID()
         # print(movieDAO.searchByMovieID(movie_id)[0])
-        print(get_movie_data.get_movie_by_id(movie_id))
+        # print(get_movie_data.get_movie_by_id(movie_id))
 
 
 if __name__ == "__main__":
     user_id = int(input("Enter the user id to generate recommendations: "))
     print("Non zero movie genres are")
-    print(get_non_zero_movie_genres(user_id))
+    print(gumcd.get_non_zero_movie_genres(user_id))
     print()
-    largest = largestIntersectionSQL(user_id, True)
-    print("Final output")
-    print(largest)
+    generateRecommendations(user_id, True)
+    # largest = largestIntersectionSQL(user_id, True)
+    # print("Final output")
+    # print(largest)
     # generateRecommendations(user_id)
     # for user_id in range(33, 611):
