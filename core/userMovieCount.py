@@ -26,6 +26,11 @@ class UserMovieCount:
         self.Thriller = Thriller
         self.War = War
         self.Western = Western
+        self.genreCounts = [
+            self.Action, self.Adventure, self.Animation, self.Children, self.Comedy, self.Crime, self.Documentary,
+            self.Drama, self.Fantasy, self.FilmNoir, self.Horror, self.IMAX, self.Musical, self.Mystery,
+            self.Romance, self.SciFi, self.Thriller, self.War, self.Western
+        ]
 
     def getUserID(self) -> int:
         return self.userId
