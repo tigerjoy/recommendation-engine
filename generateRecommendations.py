@@ -3,8 +3,11 @@ import time
 import pprint
 import createConfig
 import constant_paths
-from dao.movieDAO import MovieDAO
-from dao.averageRatingDAO import AverageRatingDAO
+from dao.userMovieCountDAO import UserMovieCountDAO
+from get_data import get_average_rating_data as gard
+from get_data import get_movie_data
+# from dao.movieDAO import MovieDAO
+# from dao.averageRatingDAO import AverageRatingDAO
 
 
 def readJSON(filename):
@@ -61,8 +64,11 @@ def readLog(filename):
         print('Something went wrong!')
 
 
+def getZeroSeenMoviesGenresByUser(user_id: int):
+    dao = UserMovieCountDAO(constant_paths.CONFIG_FILE_PATH)
+
+
 # TODO: Implement reduction of genre choices by removing genres
-# TODO: Output three sets of genre list, largest, second largest, third largest
 # TODO: Parallelize using multiprocessing module
 # This function is without any optimization
 def largestIntersectionSQL(user_id: int, verbose: bool = False):
@@ -102,9 +108,10 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
             mask >>= 1
             genre -= 1
 
-        averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+        # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
-        common_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id)
+        # common_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id)
+        common_movies = gard.get_movies_of_genres_seen_by_user(genreList, user_id)
         movieCount = len(common_movies)
 
         # New in iteration-3
@@ -118,7 +125,6 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                     recommendations[k] = recommendations[k + 1].copy()
                     recommendations[k]["priority"] = k + 1
                     k += 1
-                # largest[j] = to_insert
                 recommendations[j]["combination_num"] = count
                 recommendations[j]["common_movie_length"] = movieCount
                 recommendations[j]["common_genres"] = genreList.copy()
@@ -178,20 +184,22 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
         print("Genre List: {}".format(genreList))
         print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
 
-    averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
-    movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
-    movies_from_users_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
-    users_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id, False)
+    # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    # movieDAO = MovieDAO(constant_paths.CONFIG_FILE_PATH)
+    # movies_from_users_favourite_genre = averageRatingDAO.moviesFromGenres(genreList, False)
+    movies_from_users_favourite_genre = gard.get_movies_by_genres(genreList, False)
+    # users_seen_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id, False)
+    users_seen_movies = gard.get_movies_of_genres_seen_by_user(genreList, False)
     users_recommended_movies = set(movies_from_users_favourite_genre).difference(users_seen_movies)
     # Displaying the movies not seen by user
     for movie in users_recommended_movies:
         movie_id = movie.getMovieID()
-        print(movieDAO.searchByMovieID(movie_id)[0])
-
+        # print(movieDAO.searchByMovieID(movie_id)[0])
+        print(get_movie_data.get_movie_by_id(movie_id))
 
 if __name__ == "__main__":
     user_id = int(input("Enter the user id to generate recommendations: "))
-    largest = largestIntersectionSQL(1, True)
+    largest = largestIntersectionSQL(user_id, True)
     print("Final output")
     print(largest)
     # generateRecommendations(user_id)
