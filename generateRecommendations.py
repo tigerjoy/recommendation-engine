@@ -4,8 +4,12 @@ import pprint
 import createConfig
 import constant_paths
 from dao.userMovieCountDAO import UserMovieCountDAO
+from typing import List
 from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
+from get_data import get_user_movie_count_data as gumcd
+
+
 # from dao.movieDAO import MovieDAO
 # from dao.averageRatingDAO import AverageRatingDAO
 
@@ -64,8 +68,15 @@ def readLog(filename):
         print('Something went wrong!')
 
 
-def getZeroSeenMoviesGenresByUser(user_id: int):
-    dao = UserMovieCountDAO(constant_paths.CONFIG_FILE_PATH)
+def get_non_zero_movie_genres(user_id: int) -> List[int]:
+    genre_info = gumcd.get_genre_wise_movie_count_by_user(user_id)
+    genre_list = []
+    genre_id = 1
+    for genre_count in genre_info.genreCounts:
+        if genre_count > 0:
+            genre_list.append(genre_id)
+        genre_id += 1
+    return genre_list.copy()
 
 
 # TODO: Implement reduction of genre choices by removing genres
@@ -75,8 +86,10 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     pp = pprint.PrettyPrinter(indent=4)
     filename = "log_user_{}.json".format(user_id)
     output_log_file = filename[:filename.index('.')] + "_output.txt"
+    valid_genres = get_non_zero_movie_genres(user_id)
     start_count = 1
-    end_count = (2 ** 19)
+    # end_count = (2 ** 19)
+    end_count = (2 ** len(valid_genres))
 
     if verbose:
         # Read previous output if any
@@ -101,12 +114,14 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
 
         # Populate the genreList
         # MSB as genre 19 and LSB as genre 1
-        genre = 19
+        # genre = 19
+        index = len(valid_genres) - 1
         for i in range(19):
             if count & mask:
-                genreList.append(genre)
+                genreList.append(valid_genres[index])
             mask >>= 1
-            genre -= 1
+            # genre -= 1
+            index -= 1
 
         # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
@@ -197,8 +212,12 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
         # print(movieDAO.searchByMovieID(movie_id)[0])
         print(get_movie_data.get_movie_by_id(movie_id))
 
+
 if __name__ == "__main__":
     user_id = int(input("Enter the user id to generate recommendations: "))
+    print("Non zero movie genres are")
+    print(get_non_zero_movie_genres(user_id))
+    print()
     largest = largestIntersectionSQL(user_id, True)
     print("Final output")
     print(largest)
