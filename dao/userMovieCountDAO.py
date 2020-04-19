@@ -39,7 +39,7 @@ class UserMovieCountDAO():
     # Return a list of UserMovieCount objects
     # containing rows which have userId and genreId
     # column same as the argument
-    def searchByUserIDGenreID(self, userId:int, genreId:int) -> List[UserMovieCount]:
+    def searchByUserIDGenreID(self, userId:int, genreId:int) -> int:
         gdDAO = GenreDAO(self.prop_file)
 
         # Obtaining the genreName from genreId
