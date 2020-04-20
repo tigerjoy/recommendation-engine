@@ -111,6 +111,7 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
             # genre -= 1
             index -= 1
 
+
         # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
         # common_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id)
@@ -122,6 +123,9 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
         j = 2
         while j >= 0:
             if to_insert > recommendations[j]["common_movie_length"]:
+                # Checking if the current genre set has any unseen movies for the user
+                if gard.get_count_of_movies_of_genres_not_seen_by_user(genreList, user_id) == 0:
+                    break
                 #   Shift elements from 0 to j - 1 one position left
                 k = 0
                 while k <= j - 1:
