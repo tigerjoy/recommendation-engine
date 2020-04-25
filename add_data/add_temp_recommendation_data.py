@@ -13,34 +13,30 @@ def add_temp_recommendation(user_id: int, last_combination: int, priority: int, 
 
 
 # Adds multiple temp recommendation entry against an user
-# from the following example, dictionary input
-# {
-#     "last_combination": 524287,
-#     "recommendations": [
-#         {
-#             "priority": 1,
-#             "combination_num":16,
-#             "common_movie_length":11,
-#             "common_genres":[5]
-#         },
-#         {
-#             "priority": 2,
-#             "combination_num":10,
-#             "common_movie_length":8,
-#             "common_genres":[4]
-#         },
-#         {
-#             "priority": 3,
-#             "combination_num":6,
-#             "common_movie_length":4,
-#             "common_genres":[3]
-#         }
-#     ]
-# }
-def add_temp_recommendations(user_id: int, temp_recommendations: dict):
+# from the following example, list input and last_combination
+# [
+#     {
+#         "priority": 1,
+#         "combination_num":16,
+#         "common_movie_length":11,
+#         "common_genres":[5]
+#     },
+#     {
+#         "priority": 2,
+#         "combination_num":10,
+#         "common_movie_length":8,
+#         "common_genres":[4]
+#     },
+#     {
+#         "priority": 3,
+#         "combination_num":6,
+#         "common_movie_length":4,
+#         "common_genres":[3]
+#     }
+# ]
+def add_temp_recommendations(user_id: int, last_combination: int, temp_recommendations: list):
     result = True
-    last_combination = temp_recommendations["last_combination"]
-    for recommendation in temp_recommendations["recommendations"]:
+    for recommendation in temp_recommendations:
         priority = recommendation["priority"]
         combination_num = recommendation["combination_num"]
         common_movie_length = recommendation["common_movie_length"]
@@ -55,9 +51,7 @@ def add_temp_recommendations(user_id: int, temp_recommendations: dict):
 
 
 if __name__ == "__main__":
-    temp_rec = {
-        "last_combination": 524287,
-        "recommendations": [
+    temp_rec = [
             {
                 "priority": 1,
                 "combination_num": 16,
@@ -77,5 +71,4 @@ if __name__ == "__main__":
                 "common_genres": [3,7,8]
             }
         ]
-    }
-    print(add_temp_recommendations(1, temp_rec))
+    print(add_temp_recommendations(1, 524287, temp_rec))
