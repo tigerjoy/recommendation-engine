@@ -11,6 +11,7 @@ from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
 from get_data import get_user_movie_count_data as gumcd
 from get_data import get_temp_recommendation as gtr
+from delete_data import delete_temp_recommedation_data as dtrd
 
 
 # from dao.movieDAO import MovieDAO
@@ -63,7 +64,7 @@ def getTempRecommendation(user_id: int):
         last_combination = result["last_combination"]
         recommendations = result["recommendations"]
     else:
-        last_combination = 0
+        last_combination = 1
         recommendations = []
         recommendation_dict = {"priority": 0, "combination_num": 0,
                                "common_movie_length": 0, "common_genres": []}
@@ -111,13 +112,17 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     # start_count, recommendations = readJSON(filename)
     start_count, recommendations = getTempRecommendation(user_id)
 
+    # print("start_count:", start_count)
+    # print("recommendations:", recommendations)
+
     for count in range(start_count, end_count):
         genreList = []
 
         # Write the output after trying every 10,000 combinations
         if count % 10000 == 0:
             # writeJSON(filename, count, recommendations)
-            atrd.add_temp_recommendations(count, recommendations)
+            # print("haha")
+            atrd.add_temp_recommendations(user_id, count, recommendations)
             writeLog("Current combination {}".format(count), output_log_file)
             if verbose:
                 print("Current combination {}".format(count))
@@ -135,9 +140,7 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
             # genre -= 1
             index -= 1
 
-        # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
-        # common_movies = averageRatingDAO.moviesSeenByUser(genreList, user_id)
         common_movies = gard.get_movies_of_genres_seen_by_user(genreList, user_id)
         movieCount = len(common_movies)
 
@@ -159,7 +162,10 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                 recommendations[j]["common_movie_length"] = movieCount
                 recommendations[j]["common_genres"] = genreList.copy()
                 # writeJSON(filename, count, recommendations)
-                atrd.add_temp_recommendations(count, recommendations)
+                # print("\n\n", "count:", count)
+                # print(recommendations)
+                # print(f"atrd.add_temp_recommendations({user_id}, {count}, recommendations)\n\n")
+                atrd.add_temp_recommendations(user_id, count, recommendations)
                 if verbose:
                     # pp.pprint(recommendation)
                     print("The priority is {}".format(recommendations[j]["priority"]))
@@ -177,24 +183,12 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                 break
             j -= 1
 
-        # Will be removed in iteration-3
-        # if movieCount > largestIntersectionMovieCount:
-        #     largestIntersection = genreList.copy()
-        #     largestIntersectionMovieCount = movieCount
-        #     combination_num = count
-        #     writeJSON(filename, count, combination_num, largestIntersectionMovieCount, largestIntersection)
-        #     writeLog("The combination number for the set is {}".format(combination_num), output_log_file)
-        #     writeLog("The number of common movies are {}".format(largestIntersectionMovieCount), output_log_file)
-        #     writeLog("The genre list is {}".format(genreList), output_log_file)
-        #     if verbose:
-        #         print("The combination number for the set is {}".format(combination_num))
-        #         print("The number of common movies are {}".format(largestIntersectionMovieCount))
-        #         print("The genre list is {}".format(genreList))
-
     # Final output write
     # writeJSON(filename, count, recommendations)
-    ard.add_recommendations(recommendations)
+    ard.add_recommendations(user_id, recommendations)
     # return combination_num, largestIntersectionMovieCount, largestIntersection
+    # Cleanup of the temporary recommendations
+    dtrd.delete_temp_recommendation(user_id)
     return recommendations
 
 
@@ -252,8 +246,9 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
 if __name__ == "__main__":
     user_id = int(input("Enter the user id to generate recommendations: "))
     print("Non zero movie genres are")
-    print(gumcd.get_non_zero_movie_genres(user_id))
+    print(gumcd.get_non_zero_movie_genres(1))
     print()
+    # largestIntersectionSQL(1, True)
     generateRecommendations(user_id, True)
     # largest = largestIntersectionSQL(user_id, True)
     # print("Final output")
