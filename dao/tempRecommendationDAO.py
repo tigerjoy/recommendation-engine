@@ -61,6 +61,20 @@ class TempRecommendationDAO():
 
         return self.myConn.total_changes > 0
 
+    def updateTempRecommendation(self, the_temp_recommendation: TempRecommendation)-> bool:
+            query = f'''
+                UPDATE {self.tableName}
+                SET last_combination = {the_temp_recommendation.getLastCombination()},
+                    combination_num = {the_temp_recommendation.getCombinationNum()},
+                    common_movie_length = {the_temp_recommendation.getCommonMovieLength()},
+                    genres = '{the_temp_recommendation.getGenres()}'
+                WHERE user_id = {the_temp_recommendation.getUserID()}
+                AND priority = {the_temp_recommendation.getPriority()}
+            '''
+            self.myConn.execute(query)
+            self.myConn.commit()
+            return self.myConn.total_changes == 1
+
     def deleteTempRecommendation(self, the_temp_recommendation: TempRecommendation) -> bool:
         query = f"""
                     DELETE FROM {self.tableName}
