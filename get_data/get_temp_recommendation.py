@@ -33,6 +33,7 @@ import constant_paths
 def get_temp_recommendation_by_user(user_id: int) -> dict:
     dao = TempRecommendationDAO(constant_paths.CONFIG_FILE_PATH)
     temp_reco_list = dao.getTempRecommendationByUserID(user_id)
+    # print("temp_reco_list: ", temp_reco_list)
     last_combination = None
     result = {}
     recommendations = []
@@ -42,7 +43,10 @@ def get_temp_recommendation_by_user(user_id: int) -> dict:
         combination_num = temp_reco.getCombinationNum()
         common_movie_length = temp_reco.getCommonMovieLength()
         genres = temp_reco.getGenres()
-        common_genres = [int(x) for x in genres.split(",")]
+        if len(genres) == 0:
+            common_genres = []
+        else:
+            common_genres = [int(x) for x in genres.split(",")]
         reco_dict = {"priority": priority, "combination_num": combination_num,
                      "common_movie_length": common_movie_length, "common_genres": common_genres.copy()}
         recommendations.append(reco_dict.copy())
