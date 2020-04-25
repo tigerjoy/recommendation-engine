@@ -11,8 +11,8 @@ def add_recommendation(user_id: int, priority: int, genre_id: int):
 
 
 # Adds multiple recommendation entry against an user
-# from the following example, dictionary input
-# "recommendations": [
+# from the following example, list input
+# [
 #     {
 #         "priority": 1,
 #         "combination_num":16,
@@ -32,7 +32,7 @@ def add_recommendation(user_id: int, priority: int, genre_id: int):
 #         "common_genres":[3]
 #     }
 # ]
-def add_recommendations(user_id: int, recommendations: dict):
+def add_recommendations(user_id: int, recommendations: list):
     result = True
     for recommendation in recommendations:
         priority = recommendation["priority"]
