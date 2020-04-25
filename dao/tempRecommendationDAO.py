@@ -46,7 +46,7 @@ class TempRecommendationDAO():
 
     def addTempRecommendation(self, the_temp_recommendation: TempRecommendation) -> bool:
         query = f"""
-                    INSERT INTO '{self.table_name}'('user_id', 'last_combination', 'priority', 'combination_num', 
+                    INSERT INTO '{self.tableName}'('user_id', 'last_combination', 'priority', 'combination_num', 
                                                      'common_movie_length', 'genres') 
                     VALUES (?, ?, ?, ?, ?, ?);
                 """
