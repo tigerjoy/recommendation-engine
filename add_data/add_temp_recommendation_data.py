@@ -1,5 +1,7 @@
 from core.tempRecommendation import TempRecommendation
 from dao.tempRecommendationDAO import TempRecommendationDAO
+from update_data import update_temp_recommendation_data as utrd
+from get_data import get_temp_recommendation as gtr
 import constant_paths
 
 
@@ -36,18 +38,23 @@ def add_temp_recommendation(user_id: int, last_combination: int, priority: int, 
 # ]
 def add_temp_recommendations(user_id: int, last_combination: int, temp_recommendations: list):
     result = True
-    for recommendation in temp_recommendations:
-        priority = recommendation["priority"]
-        combination_num = recommendation["combination_num"]
-        common_movie_length = recommendation["common_movie_length"]
-        genre_ids = recommendation["common_genres"]
-        genre_str = ",".join([str(x) for x in genre_ids])
-        result = (result and add_temp_recommendation(user_id, last_combination, priority, combination_num,
-                                                     common_movie_length, genre_str))
+    #  Checking if records for user_id exists
+    if len(gtr.get_temp_recommendation_by_user(user_id)) != 0:
+        # print("update")
+        return utrd.update_temp_recommendations(user_id, last_combination, temp_recommendations)
+    else:
+        for recommendation in temp_recommendations:
+            priority = recommendation["priority"]
+            combination_num = recommendation["combination_num"]
+            common_movie_length = recommendation["common_movie_length"]
+            genre_ids = recommendation["common_genres"]
+            genre_str = ",".join([str(x) for x in genre_ids])
+            result = (result and add_temp_recommendation(user_id, last_combination, priority, combination_num,
+                                                         common_movie_length, genre_str))
 
-    # Returns True if all temp recommendations were inserted in the table
-    # False otherwise
-    return result
+        # Returns True if all temp recommendations were inserted in the table
+        # False otherwise
+        return result
 
 
 if __name__ == "__main__":
@@ -68,7 +75,7 @@ if __name__ == "__main__":
                 "priority": 3,
                 "combination_num": 6,
                 "common_movie_length": 4,
-                "common_genres": [3,7,8]
+                "common_genres": [3,7,9]
             }
         ]
     print(add_temp_recommendations(1, 524287, temp_rec))
