@@ -32,6 +32,18 @@ class RecommendationDAO():
             output.append(self.convertRowToRecommendation(row))
         return output
 
+    def getRecommendationByUser(self, user_id: int) -> List[Recommendation]:
+        output = []
+        query = f"""
+                    SELECT *
+                    FROM {self.tableName}
+                    WHERE user_id = {user_id}
+                """
+        cursor = self.myConn.execute(query)
+        for row in cursor:
+            output.append(self.convertRowToRecommendation(row))
+        return output
+
     def addRecommendation(self, the_recommendation: Recommendation):
         query = f"""
                         INSERT INTO '{self.table_name}'('user_id', 'priority', 'genre_id') 
