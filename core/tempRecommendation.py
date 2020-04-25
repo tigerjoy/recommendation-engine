@@ -1,8 +1,8 @@
 class TempRecommendation:
 
     # Parameterized Constructor
-    def __init__(self, user_id: int, last_combination: int, priority: int, combination_num: int,
-                 common_movie_length: int, genres: str) -> None:
+    def __init__(self, user_id: int = None, last_combination: int = None, priority: int = None,
+                 combination_num: int = None, common_movie_length: int = None, genres: str = None) -> None:
         self.user_id = user_id
         self.last_combination = last_combination
         self.priority = priority
