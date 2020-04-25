@@ -80,9 +80,9 @@ class TempRecommendationDAO():
                     DELETE FROM {self.tableName}
                     WHERE user_id = {the_temp_recommendation.getUserID()}
                 """
-        self.my_conn.execute(query)
+        self.myConn.execute(query)
 
-        self.my_conn.commit()
+        self.myConn.commit()
 
         return self.myConn.total_changes > 0
 
