@@ -5,15 +5,18 @@ import createConfig
 import constant_paths
 from dao.userMovieCountDAO import UserMovieCountDAO
 from typing import List
+from add_data import add_temp_recommendation_data as atrd
+from add_data import add_recommendation_data as ard
 from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
 from get_data import get_user_movie_count_data as gumcd
+from get_data import get_temp_recommendation as gtr
 
 
 # from dao.movieDAO import MovieDAO
 # from dao.averageRatingDAO import AverageRatingDAO
 
-
+# will be removed in iteration-3
 def readJSON(filename):
     last_combination = 1
     result = []
@@ -42,6 +45,7 @@ def readJSON(filename):
     return last_combination, result.copy()
 
 
+# will be removed in iteration-3
 # Modified in iteration-3
 def writeJSON(filename, last_combination, recommendation):
     with open(filename, 'w') as json_file:
@@ -50,6 +54,24 @@ def writeJSON(filename, last_combination, recommendation):
             'recommendations': recommendation
         }
         json_file.write(json.dumps(json_data, indent=4))
+
+
+def getTempRecommendation(user_id: int):
+    result = gtr.get_temp_recommendation_by_user(user_id)
+
+    if len(result) != 0:
+        last_combination = result["last_combination"]
+        recommendations = result["recommendations"]
+    else:
+        last_combination = 0
+        recommendations = []
+        recommendation_dict = {"priority": 0, "combination_num": 0,
+                               "common_movie_length": 0, "common_genres": []}
+        for i in range(1, 4):
+            recommendation_dict["priority"] = i
+            recommendations.append(recommendation_dict.copy())
+
+    return last_combination, recommendations.copy()
 
 
 def writeLog(output, filename):
@@ -86,14 +108,16 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     # New Addition iteration-3
     # Output
     # Read the backup file to resume processing
-    start_count, recommendations = readJSON(filename)
+    # start_count, recommendations = readJSON(filename)
+    start_count, recommendations = getTempRecommendation(user_id)
 
     for count in range(start_count, end_count):
         genreList = []
 
         # Write the output after trying every 10,000 combinations
         if count % 10000 == 0:
-            writeJSON(filename, count, recommendations)
+            # writeJSON(filename, count, recommendations)
+            atrd.add_temp_recommendations(count, recommendations)
             writeLog("Current combination {}".format(count), output_log_file)
             if verbose:
                 print("Current combination {}".format(count))
@@ -110,7 +134,6 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
             mask >>= 1
             # genre -= 1
             index -= 1
-
 
         # averageRatingDAO = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
         # Finding the common movies falling in all the genres of the genreList
@@ -135,7 +158,8 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                 recommendations[j]["combination_num"] = count
                 recommendations[j]["common_movie_length"] = movieCount
                 recommendations[j]["common_genres"] = genreList.copy()
-                writeJSON(filename, count, recommendations)
+                # writeJSON(filename, count, recommendations)
+                atrd.add_temp_recommendations(count, recommendations)
                 if verbose:
                     # pp.pprint(recommendation)
                     print("The priority is {}".format(recommendations[j]["priority"]))
@@ -168,7 +192,8 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
         #         print("The genre list is {}".format(genreList))
 
     # Final output write
-    writeJSON(filename, count, recommendations)
+    # writeJSON(filename, count, recommendations)
+    ard.add_recommendations(recommendations)
     # return combination_num, largestIntersectionMovieCount, largestIntersection
     return recommendations
 
@@ -196,7 +221,7 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
             print("Genre List: {}".format(recommendation["common_genres"]))
             print("Number of Movies Already Seen By User: {}".format(recommendation["common_movie_length"]))
             users_recommended_movies = gard.get_movies_of_genres_not_seen_user(
-                                                    recommendation["common_genres"], user_id, False)
+                recommendation["common_genres"], user_id, False)
             print("Number of Movies Not Seen By User: {}".format(len(users_recommended_movies)))
             print()
             count = 0
@@ -220,8 +245,8 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
     # Displaying the movies not seen by user
     # for movie in users_recommended_movies:
     #     movie_id = movie.getMovieID()
-        # print(movieDAO.searchByMovieID(movie_id)[0])
-        # print(get_movie_data.get_movie_by_id(movie_id))
+    # print(movieDAO.searchByMovieID(movie_id)[0])
+    # print(get_movie_data.get_movie_by_id(movie_id))
 
 
 if __name__ == "__main__":
