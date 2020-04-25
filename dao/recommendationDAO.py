@@ -46,7 +46,7 @@ class RecommendationDAO():
 
     def addRecommendation(self, the_recommendation: Recommendation):
         query = f"""
-                        INSERT INTO '{self.table_name}'('user_id', 'priority', 'genre_id') 
+                        INSERT INTO '{self.tableName}'('user_id', 'priority', 'genre_id') 
                         VALUES (?, ?, ?);
                         """
 
