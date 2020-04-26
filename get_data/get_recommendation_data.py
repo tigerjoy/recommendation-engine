@@ -29,7 +29,8 @@ def get_recommendation_data(user_id: int) -> List[dict]:
         genre_list = []
         for recommendation in recommendation_list:
             if recommendation.getPriority() == priority:
-                genre_list.append(int(recommendation.getPriority()))
+                genre_list.append(int(recommendation.getGenreID()))
         result_dict["common_genres"] = genre_list.copy()
-        recommendations.append(result_dict.copy())
+        if len(result_dict["common_genres"]) != 0:
+            recommendations.append(result_dict.copy())
     return recommendations
