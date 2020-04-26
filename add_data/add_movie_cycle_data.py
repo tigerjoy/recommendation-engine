@@ -7,7 +7,7 @@ import constant_paths
 
 def add_movie_cycle_data(user_id: int, last_movie_id: int, second_last_movie_id: int, priority: int) -> bool:
     # If no record exists for the user
-    if len(gmcd.get_movie_cycle_data(user_id, priority)) == 0:
+    if gmcd.get_movie_cycle_data(user_id, priority) is None:
         dao = MovieCycleDAO(constant_paths.CONFIG_FILE_PATH)
         the_record = MovieCycle(user_id, last_movie_id, second_last_movie_id, priority)
         return dao.addRecord(the_record)
