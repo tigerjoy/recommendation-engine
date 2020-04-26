@@ -5,11 +5,11 @@ from update_data import update_movie_cycle_data as umcd
 import constant_paths
 
 
-def add_movie_cycle_data(user_id: int, last_movie_id: int, second_last_movie_id: int) -> bool:
+def add_movie_cycle_data(user_id: int, last_movie_id: int, second_last_movie_id: int, priority: int) -> bool:
     # If no record exists for the user
-    if len(gmcd.get_movie_cycle_data(user_id)) == 0:
+    if len(gmcd.get_movie_cycle_data(user_id, priority)) == 0:
         dao = MovieCycleDAO(constant_paths.CONFIG_FILE_PATH)
-        the_record = MovieCycle(user_id, last_movie_id, second_last_movie_id)
+        the_record = MovieCycle(user_id, last_movie_id, second_last_movie_id, priority)
         return dao.addRecord(the_record)
     else:
-        return umcd.update_movie_cycle_data(user_id, last_movie_id, second_last_movie_id)
+        return umcd.update_movie_cycle_data(user_id, last_movie_id, second_last_movie_id, priority)
