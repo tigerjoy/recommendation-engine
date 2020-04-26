@@ -10,6 +10,7 @@ from add_data import add_recommendation_data as ard
 from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
 from get_data import get_user_movie_count_data as gumcd
+from get_data import get_recommendation_data as grd
 from get_data import get_temp_recommendation as gtr
 from delete_data import delete_temp_recommedation_data as dtrd
 
@@ -94,7 +95,15 @@ def readLog(filename):
 # TODO: Parallelize using multiprocessing module
 # This function is with reduced genre optimization
 def largestIntersectionSQL(user_id: int, verbose: bool = False):
+    # Check if existing recommendation exists for the user
+    # if so, return that recommendation
+    recommendations = grd.get_recommendation_data(user_id)
+
+    if len(recommendations) != 0:
+        return recommendations
+
     pp = pprint.PrettyPrinter(indent=4)
+
     filename = "log_user_{}.json".format(user_id)
     output_log_file = filename[:filename.index('.')] + "_output.txt"
     valid_genres = gumcd.get_non_zero_movie_genres(user_id)
@@ -211,9 +220,11 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
         print("The final result is")
         for recommendation in recommendations:
             print("Priority: {}".format(recommendation["priority"]))
-            print("Combination Number: {}".format(recommendation["combination_num"]))
+            if "combination_num" in recommendation.keys():
+                print("Combination Number: {}".format(recommendation["combination_num"]))
+            if "common_movie_length" in recommendation.keys():
+                print("Number of Movies Already Seen By User: {}".format(recommendation["common_movie_length"]))
             print("Genre List: {}".format(recommendation["common_genres"]))
-            print("Number of Movies Already Seen By User: {}".format(recommendation["common_movie_length"]))
             users_recommended_movies = gard.get_movies_of_genres_not_seen_user(
                 recommendation["common_genres"], user_id, False)
             print("Number of Movies Not Seen By User: {}".format(len(users_recommended_movies)))
@@ -246,7 +257,7 @@ def generateRecommendations(user_id: int, verbose: bool = False) -> None:
 if __name__ == "__main__":
     user_id = int(input("Enter the user id to generate recommendations: "))
     print("Non zero movie genres are")
-    print(gumcd.get_non_zero_movie_genres(1))
+    print(gumcd.get_non_zero_movie_genres(user_id))
     print()
     # largestIntersectionSQL(1, True)
     generateRecommendations(user_id, True)
