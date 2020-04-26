@@ -53,7 +53,10 @@ class MovieCycleDAO:
 
         return self.myConn.total_changes > 0
 
-    def updateRecordByUser(self, user_id: int, last_movie_id: int, second_last_movie_id) -> bool:
+    def updateRecordByUser(self, the_record: MovieCycle) -> bool:
+        last_movie_id = the_record.getLastMovieID()
+        second_last_movie_id = the_record.getSecondLastMovieID()
+        user_id = the_record.getUserID()
         query = f"""
                     UPDATE {self.tableName}
                     SET last_movie_id = {last_movie_id},
