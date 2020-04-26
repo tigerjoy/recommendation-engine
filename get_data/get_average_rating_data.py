@@ -31,7 +31,6 @@ def get_movies_of_genres_not_seen_user(genre_list: List[Genre], user_id: int, as
     movies_from_users_favourite_genre = get_movies_by_genres(genre_list, ascending)
     users_seen_movies = get_movies_of_genres_seen_by_user(genre_list, user_id, ascending)
     return list(OrderedSet(movies_from_users_favourite_genre) - OrderedSet(users_seen_movies))
-    # return set(movies_from_users_favourite_genre).difference(set(users_seen_movies))
 
 
 def get_count_of_movies_of_genres_not_seen_by_user(genre_list: List[Genre], user_id: int) -> int:
