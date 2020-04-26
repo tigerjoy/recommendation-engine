@@ -30,5 +30,9 @@
     "TempRecommendation": {
         "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "temp_recommendation"
+    },
+    "MovieCycle": {
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
+        "tableName": "movie_cycle"
     }
 }
