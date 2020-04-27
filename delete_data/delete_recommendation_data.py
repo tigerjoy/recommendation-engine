@@ -11,6 +11,7 @@ def delete_recommendation(user_id: int, priority: int) -> bool:
     return dao.deleteRecommendation(the_recommendation)
 
 
+# Deletes all recommendations for a user
 def delete_all_recommendations(user_id: int) -> bool:
     recommendations = grd.get_recommendation_data(user_id)
     deleted_recommendations = 0
@@ -21,6 +22,7 @@ def delete_all_recommendations(user_id: int) -> bool:
     return len(recommendations) == deleted_recommendations
 
 
+# Deletes specific recommendations of a user whose priority is present in the priority list
 def delete_recommendations(user_id: int, priority_list: List[int]) -> bool:
     result = True
     for priority in priority_list:
