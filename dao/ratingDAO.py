@@ -52,6 +52,22 @@ class RatingDAO():
             output.append(self.convertRowToRating(row))
         return output
 
+    # Return a list of Rating objects
+    # containing rows which have the userId
+    # and movieId column same as the argument
+    def searchByUserIDMovieID(self, userId: int, movieId: int) -> List[Rating]:
+        output = []
+        query = f"""
+                    SELECT * 
+                    FROM {self.tableName} 
+                    WHERE userId = {userId}
+                    AND movieId = {movieId}
+                """
+        cursor = self.myConn.execute(query)
+        for row in cursor:
+            output.append(self.convertRowToRating(row))
+        return output
+
     # Calculates and returns the average rating of a movie
     def calculateAverageRatingByMovie(self, movieId: int) -> float:
         query = f"""
