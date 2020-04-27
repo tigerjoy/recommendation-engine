@@ -34,5 +34,9 @@
     "MovieCycle": {
         "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "movie_cycle"
+    },
+    "Link": {
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
+        "tableName": "links"
     }
 }
