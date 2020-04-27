@@ -122,6 +122,16 @@ class AverageRatingDAO():
             output.append(self.convertRowToAverageRating(row))
         return output
 
+    def updateAverageRatingByMovie(self, the_avg_rating: AverageRating) -> bool:
+        query = f'''
+                    UPDATE {self.tableName}
+                    SET avgRating = {the_avg_rating.getAverageRating()}
+                    WHERE movieId = {the_avg_rating.getMovieID()}
+                 '''
+        self.myConn.execute(query)
+        self.myConn.commit()
+        return self.myConn.total_changes == 1
+
     # Return a list of AverageRating objects
     # containing rows which have the movieId
     # column same as the argument
