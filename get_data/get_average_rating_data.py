@@ -4,9 +4,10 @@ from dao.averageRatingDAO import AverageRatingDAO
 from typing import List
 import constant_paths
 import collections
+import json
 
 
-class OrderedSet(collections.Set):
+class OrderedSet(collections.abc.Set):
     def __init__(self, iterable=()):
         self.d = collections.OrderedDict.fromkeys(iterable)
 
@@ -54,3 +55,20 @@ def get_average_rating_by_movie(movie_id: int) -> AverageRating:
         return output[0]
     else:
         return None
+
+
+# Returns a JSON string containing the average rating of a movie
+# {
+#     "movie_id": 1,
+#     "average_rating": "3.9"
+# }
+def get_average_rating(movie_id: int) -> str:
+    avg_rating = get_average_rating_by_movie(movie_id)
+    result_dict = {
+        "movie_id": movie_id,
+        "average_rating": None if avg_rating is None else "{:.2f}".format(avg_rating.getAverageRating())[:-1]
+    }
+    return json.dumps(result_dict, indent=4, ensure_ascii=False)
+
+if __name__ == "__main__":
+    print(get_average_rating(2))
