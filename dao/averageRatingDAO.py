@@ -122,6 +122,22 @@ class AverageRatingDAO():
             output.append(self.convertRowToAverageRating(row))
         return output
 
+    # Add a average rating entry for a movie
+    def addAverageRatingByMovie(self, the_avg_rating: AverageRating) -> bool:
+        query = f"""
+                    INSERT INTO '{self.tableName}' ('movieId', 'avgRating') 
+                    VALUES (?, ?);
+                """
+
+        data_tuple = (the_avg_rating.getMovieID(), the_avg_rating.getAverageRating())
+
+        self.myConn.execute(query, data_tuple)
+
+        self.myConn.commit()
+
+        return self.myConn.total_changes > 0
+
+    # Update the average rating entry for a movie
     def updateAverageRatingByMovie(self, the_avg_rating: AverageRating) -> bool:
         query = f'''
                     UPDATE {self.tableName}
