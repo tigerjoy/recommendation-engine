@@ -25,10 +25,17 @@ class AverageRatingDAO():
 
     # Return a list of AverageRating objects
     # containing all the rows present in the rating table
-    def getAllAverageRatings(self) -> List[AverageRating]:
+    # in ascending order of average rating if ascending is True,
+    # in descending order of average rating otherwise
+    def getAllAverageRatings(self, ascending: bool) -> List[AverageRating]:
         output = []
-
-        cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
+        order = "ASC" if ascending else "DESC";
+        query = f"""
+                    SELECT *
+                    FROM {self.tableName}
+                    ORDER BY avgRating {order}
+                """
+        cursor = self.myConn.execute(query)
 
         for row in cursor:
             output.append(self.convertRowToAverageRating(row))

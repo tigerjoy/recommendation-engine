@@ -1,6 +1,7 @@
 from get_data import get_recommendation_data as grd
 from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
+from get_data import get_rating_data
 from get_data import get_movie_cycle_data as gmcd
 from add_data import add_movie_cycle_data as amcd
 import json
@@ -87,6 +88,7 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 # 		.
 # 	]
 # }
+# TODO: Add IMDB id for movieId
 def get_recommended_movies(user_id: int, priority: int) -> str:
     result_dict = {"user_id": user_id, "priority": priority}
     recommended_genres = grd.get_recommendation_data(user_id)
@@ -190,7 +192,73 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
     return json.dumps(result_dict, indent=4)
 
 
+# Returns the top 30(default) popular unseen movies for the user
+# as a JSON string as a result, anb example of which is given below
+# {
+# 	"user_id": 1,
+# 	"hasMovies": true,
+# 	"movieCount": 30,
+# 	"movies": [
+# 		{
+# 			"movie_id": 70451,
+# 			"title": "Max Manus (2008)"
+# 			"genres": "Action, Drama, War",
+# 		},
+# 		{
+# 			"movie_id": 170705,
+# 			"title": "Band of Brothers (2001)"
+# 			"genres": "Action, Drama, War",
+# 		},
+# 		.
+# 		.
+# 		.
+# 	]
+# }
+# TODO: Add IMDB id for movieId
+def get_popular_movies(user_id: int, count: int = 15) -> str:
+    # Get all movies in descending order of average rating
+    all_movies = gard.get_all_movies_by_average_rating(False)
+
+    # Get movies seen by the user
+    movies_seen_by_user = get_rating_data.get_movies_seen_by_user(user_id)
+
+    # Find all movies not seen by user
+    all_movie_ids = [movies.getMovieID() for movies in all_movies]
+    seen_movie_ids = [movies.getMovieID() for movies in movies_seen_by_user]
+    not_seen_movie_ids = list(gard.OrderedSet(all_movie_ids) - gard.OrderedSet(seen_movie_ids))
+
+    # Create JSON string to suggest first (count) i.e. 15, etc. not seen movies
+    result_dict = {"user_id": user_id, "movies": []}
+
+    length = len(not_seen_movie_ids)
+
+    if length < count:
+        count = length
+
+    i = 0
+    while i < count:
+        movie_temp = {}
+        movie_id = not_seen_movie_ids[i]
+        movie_details = get_movie_data.get_movie_by_id(movie_id)
+        movie_temp["movie_id"] = movie_details.getMovieID()
+        movie_temp["title"] = movie_details.getTitle()
+        movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
+        result_dict["movies"].append(movie_temp.copy())
+        i += 1
+
+    if i == 0:
+        count = 0
+        result_dict["hasMovies"] = False
+    else:
+        result_dict["hasMovies"] = True
+
+    result_dict["movieCount"] = count
+
+    return json.dumps(result_dict, indent=4)
+
+
 if __name__ == "__main__":
     # print(get_all_recommended_movies(1, 3))
     # print(get_recommended_movies(1, 3))
+    print(get_popular_movies(1))
     pass

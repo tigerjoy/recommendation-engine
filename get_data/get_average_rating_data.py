@@ -20,6 +20,11 @@ class OrderedSet(collections.Set):
         return iter(self.d)
 
 
+def get_all_movies_by_average_rating(ascending: bool = False) -> List[AverageRating]:
+    dao = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    return dao.getAllAverageRatings(ascending)
+
+
 def get_movies_of_genres_seen_by_user(genre_list: List[Genre], user_id: int, ascending: bool = False) -> List[
     AverageRating]:
     dao = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)

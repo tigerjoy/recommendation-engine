@@ -18,3 +18,9 @@ def get_rating_by_user_movie(user_id: int, movie_id: int) -> Rating:
 def get_average_rating_by_movie(movie_id: int) -> float:
     dao = RatingDAO(constant_paths.CONFIG_FILE_PATH)
     return dao.calculateAverageRatingByMovie(movie_id)
+
+
+# To get movie_id and rating information of movies seen by user
+def get_movies_seen_by_user(user_id: int) -> List[Rating]:
+    dao = RatingDAO(constant_paths.CONFIG_FILE_PATH)
+    return dao.searchByUserID(user_id)
