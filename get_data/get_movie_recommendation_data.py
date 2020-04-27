@@ -4,8 +4,13 @@ from get_data import get_movie_data
 from get_data import get_rating_data
 from get_data import get_movie_cycle_data as gmcd
 from get_data import get_link_data
+from get_data import get_generating_recommendation_data as ggrd
 from add_data import add_movie_cycle_data as amcd
+from delete_data import delete_recommendation_data as drd
+from generate_data import generateRecommendations as gr
+from typing import List
 import json
+import threading
 
 
 # Returns all the recommended movies for user_id for a
@@ -19,11 +24,15 @@ import json
 # 	"movies": [
 # 		{
 # 			"movie_id": 70451,
+# 			"imdb_id": "tt009876",
+#            "tmdb_id": "7865",
 # 			"title": "Max Manus (2008)"
 # 			"genres": "Action, Drama, War",
 # 		},
 # 		{
 # 			"movie_id": 170705,
+# 			"imdb_id": "tt009877",
+#           "tmdb_id": "7866",
 # 			"title": "Band of Brothers (2001)"
 # 			"genres": "Action, Drama, War",
 # 		},
@@ -32,7 +41,6 @@ import json
 # 		.
 # 	]
 # }
-# TODO: Add IMDB id for movieId
 def get_all_recommended_movies(user_id: int, priority: int) -> str:
     result_dict = {"user_id": user_id, "priority": priority}
     recommended_genres = grd.get_recommendation_data(user_id)
@@ -67,6 +75,44 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
     return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
+# ERROR HERE
+# AND IN LARGEST INTERSECTION SQL
+def start_generation(user_id: int):
+    # TODO: Start generation of new recommendation, in a separate thread
+    x = threading.Thread(target=gr.largestIntersectionSQL, args=(user_id))
+    x.start()
+
+
+def should_generate_recommendations(user_id: int, priority: int) -> bool:
+    result = None
+    # Check if recommendations are already being generated
+    if ggrd.check_user_exists(user_id):
+        # If recommendations are being generated, do not spawn a thread
+        result = True
+    else:
+        # Check if at least two of the current recommendations have unseen movies
+        recommended_genres = grd.get_recommendation_data(user_id)
+        if len(recommended_genres) >= 2:
+            no_seen_movie_genres = []
+            for genre in recommended_genres:
+                genre_list = genre["common_genres"]
+                if len(gard.get_movies_of_genres_not_seen_user(genre_list, user_id)) == 0:
+                    no_seen_movie_genres.append(genre["priority"])
+            # Delete those recommendations for which there are no unseen movies
+            drd.delete_recommendations(user_id, no_seen_movie_genres)
+            # If there are more than two recommendations with no unseen movies
+            if len(no_seen_movie_genres) >= 2:
+                start_generation(user_id)
+                result = True
+            else:
+                result = False
+        # If only one or no recommendation genre exists, start generation
+        else:
+            start_generation(user_id)
+            result = True
+    return result
+
+
 # Returns 10 recommended movies at a time for user_id for a
 # particular priority as a JSON string, an example is provided below
 # The JSON string is indented by 4 spaces
@@ -78,11 +124,15 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 # 	"movies": [
 # 		{
 # 			"movie_id": 70451,
+#           "imdb_id": "tt009876",
+#           "tmdb_id": "7865",
 # 			"title": "Max Manus (2008)"
 # 			"genres": "Action, Drama, War",
 # 		},
 # 		{
 # 			"movie_id": 170705,
+#           "imdb_id": "tt009877",
+#           "tmdb_id": "7866",
 # 			"title": "Band of Brothers (2001)"
 # 			"genres": "Action, Drama, War",
 # 		},
@@ -91,9 +141,10 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 # 		.
 # 	]
 # }
-# TODO: Add IMDB id for movieId
 def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
-    result_dict = {"user_id": user_id, "priority": priority}
+    result_dict = {"user_id": user_id, "priority": priority,
+                   "is_generating_recommendation": should_generate_recommendations(user_id, priority)}
+    # Check if new recommendations are required
     recommended_genres = grd.get_recommendation_data(user_id)
     genre_list = []
     for recommend_genre in recommended_genres:
@@ -216,11 +267,15 @@ def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
 # 	"movies": [
 # 		{
 # 			"movie_id": 70451,
+# 			"imdb_id": "tt009876",
+#           "tmdb_id": "7865",
 # 			"title": "Max Manus (2008)"
 # 			"genres": "Action, Drama, War",
 # 		},
 # 		{
 # 			"movie_id": 170705,
+#           "imdb_id": "tt009877",
+#           "tmdb_id": "7866",
 # 			"title": "Band of Brothers (2001)"
 # 			"genres": "Action, Drama, War",
 # 		},
@@ -229,7 +284,6 @@ def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
 # 		.
 # 	]
 # }
-# TODO: Add IMDB id for movieId
 def get_popular_movies(user_id: int, count: int = 15) -> str:
     # Get all movies in descending order of average rating
     all_movies = gard.get_all_movies_by_average_rating(False)
@@ -276,6 +330,6 @@ def get_popular_movies(user_id: int, count: int = 15) -> str:
 
 if __name__ == "__main__":
     # print(get_all_recommended_movies(1, 3))
-    # print(get_recommended_movies(1, 3))
-    print(get_popular_movies(1))
+    print(get_recommended_movies(10, 3))
+    # print(get_popular_movies(1))
     pass
