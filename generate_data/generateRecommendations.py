@@ -5,7 +5,9 @@ import createConfig
 import constant_paths
 from dao.userMovieCountDAO import UserMovieCountDAO
 from typing import List
+from delete_data import delete_generating_recommendation_data as dgrd
 from add_data import add_temp_recommendation_data as atrd
+from add_data import add_generating_recommnedation_data as agrd
 from add_data import add_recommendation_data as ard
 from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
@@ -13,7 +15,7 @@ from get_data import get_user_movie_count_data as gumcd
 from get_data import get_recommendation_data as grd
 from get_data import get_temp_recommendation as gtr
 from delete_data import delete_temp_recommedation_data as dtrd
-
+from delete_data import delete_recommendation_data as drd
 
 # from dao.movieDAO import MovieDAO
 # from dao.averageRatingDAO import AverageRatingDAO
@@ -97,10 +99,10 @@ def readLog(filename):
 def largestIntersectionSQL(user_id: int, verbose: bool = False):
     # Check if existing recommendation exists for the user
     # if so, return that recommendation
-    recommendations = grd.get_recommendation_data(user_id)
-
-    if len(recommendations) != 0:
-        return recommendations
+    # recommendations = grd.get_recommendation_data(user_id)
+    #
+    # if len(recommendations) != 0:
+    #     return recommendations
 
     pp = pprint.PrettyPrinter(indent=4)
 
@@ -123,6 +125,9 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
 
     # print("start_count:", start_count)
     # print("recommendations:", recommendations)
+
+    # Starting recommendation generation
+    agrd.add_user(user_id)
 
     for count in range(start_count, end_count):
         genreList = []
@@ -192,12 +197,20 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                 break
             j -= 1
 
+    # Delete any old recommendation
+    # Continue deleting recommendations until
+    # all recommendations are deleted
+    while not drd.delete_all_recommendations(user_id):
+        pass
     # Final output write
     # writeJSON(filename, count, recommendations)
     ard.add_recommendations(user_id, recommendations)
     # return combination_num, largestIntersectionMovieCount, largestIntersection
     # Cleanup of the temporary recommendations
     dtrd.delete_temp_recommendation(user_id)
+
+    # Ending recommendation generation
+    dgrd.delete_user(user_id)
     return recommendations
 
 
