@@ -1,0 +1,24 @@
+The priority is 3
+The combination number for the set is 24
+The number of common movies are 1
+The genre list is [17, 16]
+The priority is 2
+The combination number for the set is 88
+The number of common movies are 1
+The genre list is [1, 17, 16]
+The priority is 1
+The combination number for the set is 192
+The number of common movies are 1
+The genre list is [2, 1]
+The priority is 3
+The combination number for the set is 256
+The number of common movies are 2
+The genre list is [5]
+The priority is 2
+The combination number for the set is 1024
+The number of common movies are 2
+The genre list is [8]
+The priority is 1
+The combination number for the set is 1028
+The number of common movies are 2
+The genre list is [8, 15]
