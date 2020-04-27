@@ -8,7 +8,7 @@ def get_imdb_id_by_movie(movie_id: int) -> str:
     dao = LinkDAO(constant_paths.CONFIG_FILE_PATH)
     result = dao.searchByMovieID(movie_id)
     if len(result) != 0:
-        return "{:07}".format(result[0].getIMDBID())
+        return "tt{:07}".format(result[0].getIMDBID())
     else:
         return ""
 
