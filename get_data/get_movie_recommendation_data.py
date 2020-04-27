@@ -191,5 +191,6 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
 
 
 if __name__ == "__main__":
-    # print(get_all_recommended_movies(1, 2))
-    print(get_recommended_movies(1, 2))
+    # print(get_all_recommended_movies(1, 3))
+    # print(get_recommended_movies(1, 3))
+    pass
