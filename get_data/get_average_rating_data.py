@@ -40,3 +40,12 @@ def get_count_of_movies_of_genres_not_seen_by_user(genre_list: List[Genre], user
 def get_movies_by_genres(genre_list: List[Genre], ascending: bool = False) -> List[AverageRating]:
     dao = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
     return dao.moviesFromGenres(genre_list, ascending)
+
+
+def get_average_rating_by_movie(movie_id: int) -> AverageRating:
+    dao = AverageRatingDAO(constant_paths.CONFIG_FILE_PATH)
+    output = dao.searchByMovieID(movie_id)
+    if len(output) > 0:
+        return output[0]
+    else:
+        return None
