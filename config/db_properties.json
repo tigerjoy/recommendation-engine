@@ -38,5 +38,9 @@
     "Link": {
         "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
         "tableName": "links"
+    },
+    "GenerateRecommendation": {
+        "dbURL": "C:\\Users\\Ranajoy\\PycharmProjects\\recommendation-engine\\db\\all.db",
+        "tableName": "generating_recommendation"
     }
 }
