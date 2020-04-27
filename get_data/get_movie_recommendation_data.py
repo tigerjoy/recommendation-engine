@@ -3,6 +3,7 @@ from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
 from get_data import get_rating_data
 from get_data import get_movie_cycle_data as gmcd
+from get_data import get_link_data
 from add_data import add_movie_cycle_data as amcd
 import json
 
@@ -51,6 +52,8 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
                 movie_id = movie.getMovieID()
                 movie_details = get_movie_data.get_movie_by_id(movie_id)
                 movie_temp["movie_id"] = movie_details.getMovieID()
+                movie_temp["imdb_id"] = get_link_data.get_imdb_id_by_movie(movie_id)
+                movie_temp["tmdb_id"] = get_link_data.get_tmdb_id_by_movie(movie_id)
                 movie_temp["title"] = movie_details.getTitle()
                 movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
                 result_dict["movies"].append(movie_temp.copy())
@@ -61,7 +64,7 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
         result_dict["hasMovies"] = False
         result_dict["movieCount"] = 0
 
-    return json.dumps(result_dict, indent=4)
+    return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
 # Returns 10 recommended movies at a time for user_id for a
@@ -89,7 +92,7 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 # 	]
 # }
 # TODO: Add IMDB id for movieId
-def get_recommended_movies(user_id: int, priority: int) -> str:
+def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
     result_dict = {"user_id": user_id, "priority": priority}
     recommended_genres = grd.get_recommendation_data(user_id)
     genre_list = []
@@ -103,7 +106,8 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
         if len(movies) == 0:
             result_dict["hasMovies"] = False
             result_dict["movieCount"] = 0
-        elif len(movies) <= 10:
+        # elif len(movies) <= 10:
+        elif len(movies) <= count:
             result_dict["hasMovies"] = True
             result_dict["movieCount"] = len(movies)
             for movie in movies:
@@ -111,6 +115,8 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
                 movie_id = movie.getMovieID()
                 movie_details = get_movie_data.get_movie_by_id(movie_id)
                 movie_temp["movie_id"] = movie_details.getMovieID()
+                movie_temp["imdb_id"] = get_link_data.get_imdb_id_by_movie(movie_id)
+                movie_temp["tmdb_id"] = get_link_data.get_tmdb_id_by_movie(movie_id)
                 movie_temp["title"] = movie_details.getTitle()
                 movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
                 result_dict["movies"].append(movie_temp.copy())
@@ -119,16 +125,21 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
             # No cycle record exists for the user
             if movie_cycle_record is None:
                 # Display the first 10 movies
+                # Display the first count movies
                 result_dict["hasMovies"] = True
-                result_dict["movieCount"] = 10
+                # result_dict["movieCount"] = 10
+                result_dict["movieCount"] = count
                 ctr = 0
                 for movie in movies:
-                    if ctr == 10:
+                    # if ctr == 10:
+                    if ctr == count:
                         break
                     movie_temp = {}
                     movie_id = movie.getMovieID()
                     movie_details = get_movie_data.get_movie_by_id(movie_id)
                     movie_temp["movie_id"] = movie_details.getMovieID()
+                    movie_temp["imdb_id"] = get_link_data.get_imdb_id_by_movie(movie_id)
+                    movie_temp["tmdb_id"] = get_link_data.get_tmdb_id_by_movie(movie_id)
                     movie_temp["title"] = movie_details.getTitle()
                     movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
                     result_dict["movies"].append(movie_temp.copy())
@@ -141,7 +152,8 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
                 # print("last_movie_id:", last_movie_id)
                 # print("second_last_movie_id", second_last_movie_id)
                 result_dict["hasMovies"] = True
-                result_dict["movieCount"] = 10
+                # result_dict["movieCount"] = 10
+                result_dict["movieCount"] = count
                 last_movie_index = -1
                 second_last_movie_index = -1
                 movies_length = len(movies)
@@ -169,12 +181,15 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
                 else:
                     index = (second_last_movie_index + 1) % movies_length
 
-                ctr = 10
+                # ctr = 10
+                ctr = count
                 while ctr > 0:
                     movie_temp = {}
                     movie_id = movies[index].getMovieID()
                     movie_details = get_movie_data.get_movie_by_id(movie_id)
                     movie_temp["movie_id"] = movie_details.getMovieID()
+                    movie_temp["imdb_id"] = get_link_data.get_imdb_id_by_movie(movie_id)
+                    movie_temp["tmdb_id"] = get_link_data.get_tmdb_id_by_movie(movie_id)
                     movie_temp["title"] = movie_details.getTitle()
                     movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
                     result_dict["movies"].append(movie_temp.copy())
@@ -189,7 +204,7 @@ def get_recommended_movies(user_id: int, priority: int) -> str:
         result_dict["hasMovies"] = False
         result_dict["movieCount"] = 0
 
-    return json.dumps(result_dict, indent=4)
+    return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
 # Returns the top 30(default) popular unseen movies for the user
@@ -241,6 +256,8 @@ def get_popular_movies(user_id: int, count: int = 15) -> str:
         movie_id = not_seen_movie_ids[i]
         movie_details = get_movie_data.get_movie_by_id(movie_id)
         movie_temp["movie_id"] = movie_details.getMovieID()
+        movie_temp["imdb_id"] = get_link_data.get_imdb_id_by_movie(movie_id)
+        movie_temp["tmdb_id"] = get_link_data.get_tmdb_id_by_movie(movie_id)
         movie_temp["title"] = movie_details.getTitle()
         movie_temp["genres"] = movie_details.getGenres().replace('|', ', ')
         result_dict["movies"].append(movie_temp.copy())
@@ -254,7 +271,7 @@ def get_popular_movies(user_id: int, count: int = 15) -> str:
 
     result_dict["movieCount"] = count
 
-    return json.dumps(result_dict, indent=4)
+    return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
 if __name__ == "__main__":
