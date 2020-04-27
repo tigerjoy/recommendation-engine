@@ -32,6 +32,13 @@ class RatingDAO():
             output.append(self.convertRowToRating(row))
         return output
 
+    def getAllUsers(self) -> List[int]:
+        output = []
+        cursor = self.myConn.execute(f"SELECT DISTINCT userId FROM {self.tableName}")
+        for row in cursor:
+            output.append(row[0])
+        return output
+
     # Return a list of Rating objects
     # containing rows which have the movieId
     # column same as the argument
@@ -78,6 +85,8 @@ class RatingDAO():
         row = self.myConn.execute(query).fetchone()
         avgRating = row[0]
         return avgRating
+
+
 
     # Add a rating entry in the ratings_out table
     # Returns True if insert operation is successful, False otherwise
