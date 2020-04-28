@@ -58,5 +58,22 @@ def get_all_users() -> str:
     return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
+# Returns a JSON string containing true if user_id has watched movie_id
+# false, otherwise
+# {
+#     "user_id": 1,
+#     "movie_id": 1,
+#     "has_watched": true
+# }
+def has_watched(user_id: int, movie_id: int) -> str:
+    rating = get_rating_by_user_movie(user_id, movie_id)
+    result_dict = {
+        "user_id": user_id,
+        "movie_id": movie_id,
+        "has_watched": rating is not None
+    }
+    return json.dumps(result_dict, indent=4, ensure_ascii=False)
+
+
 if __name__ == "__main__":
-    print(get_rating_data(1, 2018))
+    print(has_watched(1, 2))
