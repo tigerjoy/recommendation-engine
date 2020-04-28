@@ -35,11 +35,11 @@ class GenerateRecommendationDAO():
     # Adds the user_id to the table
     def addUserID(self, the_user: GenerateRecommendation) -> bool:
         query = f"""
-                    INSERT INTO '{self.tableName}'('user_id') 
+                    INSERT INTO '{self.tableName}'('userId') 
                     VALUES (?);
                 """
 
-        data_tuple = (the_user.getUserID())
+        data_tuple = (the_user.getUserID(), )
 
         self.myConn.execute(query, data_tuple)
 
@@ -51,10 +51,10 @@ class GenerateRecommendationDAO():
     def deleteUserID(self, the_user: GenerateRecommendation) -> bool:
         query = f"""
                     DELETE FROM {self.tableName}
-                    WHERE user_id = {the_user.getUserID()}
+                    WHERE userId = {the_user.getUserID()}
                 """
-        self.my_conn.execute(query)
-        self.my_conn.commit()
+        self.myConn.execute(query)
+        self.myConn.commit()
         return self.myConn.total_changes > 0
 
     # Searches for a user_id from the table
