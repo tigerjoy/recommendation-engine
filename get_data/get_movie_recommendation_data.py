@@ -9,6 +9,7 @@ from add_data import add_movie_cycle_data as amcd
 from delete_data import delete_recommendation_data as drd
 from generate_data import generateRecommendations as gr
 from typing import List
+import time
 import json
 import threading
 
@@ -74,18 +75,19 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 
     return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
-
-# ERROR HERE
-# AND IN LARGEST INTERSECTION SQL
+# count_calls = 0
 def start_generation(user_id: int):
-    # TODO: Start generation of new recommendation, in a separate thread
-    x = threading.Thread(target=gr.largestIntersectionSQL, args=(user_id))
+    # global count_calls
+    # count_calls += 1
+    # print(f"Called {count_calls}")
+    x = threading.Thread(target=gr.largestIntersectionSQL, args=(user_id, True))
     x.start()
 
 
 def should_generate_recommendations(user_id: int, priority: int) -> bool:
     result = None
     # Check if recommendations are already being generated
+    # print(f"User {user_id} Priority {priority} exists - {ggrd.check_user_exists(user_id)}")
     if ggrd.check_user_exists(user_id):
         # If recommendations are being generated, do not spawn a thread
         result = True
@@ -142,6 +144,8 @@ def should_generate_recommendations(user_id: int, priority: int) -> bool:
 # 	]
 # }
 def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
+    artificial_wait = 2
+    time.sleep(artificial_wait)
     result_dict = {"user_id": user_id, "priority": priority,
                    "is_generating_recommendation": should_generate_recommendations(user_id, priority)}
     # Check if new recommendations are required
@@ -259,10 +263,11 @@ def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
 
 
 # Returns the top 30(default) popular unseen movies for the user
-# as a JSON string as a result, anb example of which is given below
+# as a JSON string as a result, and example of which is given below
 # {
 # 	"user_id": 1,
 # 	"hasMovies": true,
+#   "is_generating_recommendation": false,
 # 	"movieCount": 30,
 # 	"movies": [
 # 		{
@@ -283,6 +288,15 @@ def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
 # 		.
 # 		.
 # 	]
+# }
+# But, if no recommendations exist for the user, then the following JSON will be returned
+# {
+#     "user_id": 9,
+#     "priority": 1,
+#     "is_generating_recommendation": true,
+#     "movies": [],
+#     "hasMovies": false,
+#     "movieCount": 0
 # }
 def get_popular_movies(user_id: int, count: int = 15) -> str:
     # Get all movies in descending order of average rating
@@ -330,6 +344,13 @@ def get_popular_movies(user_id: int, count: int = 15) -> str:
 
 if __name__ == "__main__":
     # print(get_all_recommended_movies(1, 3))
-    print(get_recommended_movies(10, 3))
-    # print(get_popular_movies(1))
+    user_id = 147
+    print(get_recommended_movies(user_id, 1))
+    # time.sleep(2)
+    print(get_recommended_movies(user_id, 2))
+    # time.sleep(2)
+    print(get_recommended_movies(user_id, 3))
+    # time.sleep(2)
+    print(get_popular_movies(user_id))
+
     pass
