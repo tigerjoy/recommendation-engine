@@ -32,6 +32,7 @@ class RecommendationDAO():
             output.append(self.convertRowToRecommendation(row))
         return output
 
+    # Returns the recommendation of the user
     def getRecommendationByUser(self, user_id: int) -> List[Recommendation]:
         output = []
         query = f"""
@@ -44,6 +45,7 @@ class RecommendationDAO():
             output.append(self.convertRowToRecommendation(row))
         return output
 
+    # Adds an entry in the table
     def addRecommendation(self, the_recommendation: Recommendation):
         query = f"""
                         INSERT INTO '{self.tableName}'('user_id', 'priority', 'genre_id') 
@@ -59,15 +61,16 @@ class RecommendationDAO():
 
         return self.myConn.total_changes > 0
 
+    # Deletes an entry from the table
     def deleteRecommendation(self, the_recommendation: Recommendation):
         query = f"""
                     DELETE FROM {self.tableName}
                     WHERE user_id = {the_recommendation.getUserID()}
                     AND priority = {the_recommendation.getPriority()}
                 """
-        self.my_conn.execute(query)
+        self.myConn.execute(query)
 
-        self.my_conn.commit()
+        self.myConn.commit()
 
         return self.myConn.total_changes > 0
 
