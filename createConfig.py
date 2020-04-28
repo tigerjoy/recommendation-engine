@@ -15,7 +15,7 @@ else:
     db_path = os.path.abspath("db/all.db")
     log_path = os.path.abspath("logs")
 
-    print("Setting up the config file...")
+    # print("Setting up the config file...")
 
     content = None
     with open(config_path, "r+") as file:
@@ -27,9 +27,9 @@ else:
         file.write(json.dumps(content, indent=4))
         file.truncate()
 
-    print("Created config file successfully!")
+    # print("Created config file successfully!")
 
-    print("Setting up the path file...")
+    # print("Setting up the path file...")
 
     path_file = os.path.abspath("constant_paths.py")
 
@@ -38,4 +38,4 @@ else:
         file.write("\nLOG_FILE_PATH = " + repr(log_path))
         file.truncate()
 
-    print("Created path file successfully!")
+    # print("Created path file successfully!")
