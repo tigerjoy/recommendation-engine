@@ -1,7 +1,6 @@
 import json
 import time
 import pprint
-import createConfig
 import constant_paths
 from dao.userMovieCountDAO import UserMovieCountDAO
 from typing import List
@@ -13,9 +12,11 @@ from get_data import get_average_rating_data as gard
 from get_data import get_movie_data
 from get_data import get_user_movie_count_data as gumcd
 from get_data import get_recommendation_data as grd
+from get_data import get_generating_recommendation_data as ggrd
 from get_data import get_temp_recommendation as gtr
 from delete_data import delete_temp_recommedation_data as dtrd
 from delete_data import delete_recommendation_data as drd
+
 
 # from dao.movieDAO import MovieDAO
 # from dao.averageRatingDAO import AverageRatingDAO
@@ -97,6 +98,7 @@ def readLog(filename):
 # TODO: Parallelize using multiprocessing module
 # This function is with reduced genre optimization
 def largestIntersectionSQL(user_id: int, verbose: bool = False):
+    start_time = time.time()
     # Check if existing recommendation exists for the user
     # if so, return that recommendation
     # recommendations = grd.get_recommendation_data(user_id)
@@ -107,15 +109,20 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     pp = pprint.PrettyPrinter(indent=4)
 
     filename = "log_user_{}.json".format(user_id)
-    output_log_file = filename[:filename.index('.')] + "_output.txt"
+    output_log_file = constant_paths.LOG_FILE_PATH + "\\" + filename[:filename.index('.')] + "_output.txt"
     valid_genres = gumcd.get_non_zero_movie_genres(user_id)
+
+    writeLog("Non zero movie genres are", output_log_file)
+    print("Non zero movie genres are")
+    writeLog(valid_genres, output_log_file)
+    print(valid_genres)
     start_count = 1
     # end_count = (2 ** 19)
     end_count = (2 ** len(valid_genres))
 
-    if verbose:
+    # if verbose:
         # Read previous output if any
-        readLog(output_log_file)
+        # readLog(output_log_file)
 
     # New Addition iteration-3
     # Output
@@ -127,7 +134,12 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
     # print("recommendations:", recommendations)
 
     # Starting recommendation generation
-    agrd.add_user(user_id)
+    # If the current already exists, don't add to the list
+    # otherwise, add the user
+    if not ggrd.check_user_exists(user_id):
+        writeLog("Adding user to generating_recommendation list...", output_log_file)
+        agrd.add_user(user_id)
+        writeLog("done!", output_log_file)
 
     for count in range(start_count, end_count):
         genreList = []
@@ -197,20 +209,51 @@ def largestIntersectionSQL(user_id: int, verbose: bool = False):
                 break
             j -= 1
 
+    # Add the final temporary recommendations
+    atrd.add_temp_recommendations(user_id, count, recommendations)
+
     # Delete any old recommendation
     # Continue deleting recommendations until
     # all recommendations are deleted
+    writeLog("Deleting old recommendations...", output_log_file)
+    print("Deleting old recommendations...")
     while not drd.delete_all_recommendations(user_id):
         pass
+    writeLog("done!", output_log_file)
+    print("done!")
+
     # Final output write
     # writeJSON(filename, count, recommendations)
+    writeLog("Adding new recommendations...", output_log_file)
+    print("Adding new recommendations...")
     ard.add_recommendations(user_id, recommendations)
-    # return combination_num, largestIntersectionMovieCount, largestIntersection
-    # Cleanup of the temporary recommendations
-    dtrd.delete_temp_recommendation(user_id)
+    writeLog("done!", output_log_file)
+    print("done!")
 
+    # return combination_num, largestIntersectionMovieCount, largestIntersection
     # Ending recommendation generation
+    writeLog("Deleting user from generating_recommendation list...", output_log_file)
+    print("Deleting user from generating_recommendation list...")
     dgrd.delete_user(user_id)
+    writeLog("done!", output_log_file)
+    print("done!")
+
+    # Cleanup of the temporary recommendations
+    writeLog("Cleanup of temporary recommendations...", output_log_file)
+    print("Cleanup of temporary recommendations...")
+    dtrd.delete_temp_recommendation(user_id)
+    writeLog("done!", output_log_file)
+    print("done!")
+
+    writeLog("The recommendations are...", output_log_file)
+    print("The recommendations are...")
+    json_recommendations = json.dumps(recommendations, indent=4, ensure_ascii=False)
+    writeLog(json_recommendations, output_log_file)
+    print(json_recommendations)
+    end_time = time.time()
+    time_tuple = time.gmtime(end_time - start_time)
+    print("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)))
+    writeLog("Time taken to perform intersection: {}\n\n".format(time.strftime('%H:%M:%S', time_tuple)), output_log_file)
     return recommendations
 
 
