@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # Do not remove the below lines
     perform_checks.start_checks()
     print("\nGet recommended movies for User 189 and Priority 1")
-    print(gmrd.get_recommended_movies(194, 1))
+    print(gmrd.get_recommended_movies(189, 1))
     print("\nGet Popular Movies for User 189")
     print(gmrd.get_popular_movies(189))
     print("\nSearch movie by title")
