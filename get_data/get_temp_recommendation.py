@@ -58,6 +58,11 @@ def get_temp_recommendation_by_user(user_id: int) -> dict:
     return result
 
 
+def get_all_user_id():
+    dao = TempRecommendationDAO(constant_paths.CONFIG_FILE_PATH)
+    return dao.getAllUserID()
+
+
 if __name__ == "__main__":
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(get_temp_recommendation_by_user(1))
