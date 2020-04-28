@@ -32,6 +32,7 @@ class TempRecommendationDAO():
             output.append(self.convertRowToTempRecommendation(row))
         return output
 
+    # Returns the temporary recommendation by user id
     def getTempRecommendationByUserID(self, user_id: int) -> List[TempRecommendation]:
         output = []
         query = f"""
@@ -44,6 +45,7 @@ class TempRecommendationDAO():
             output.append(self.convertRowToTempRecommendation(row))
         return output
 
+    # Adds an entry in the table
     def addTempRecommendation(self, the_temp_recommendation: TempRecommendation) -> bool:
         query = f"""
                     INSERT INTO '{self.tableName}'('user_id', 'last_combination', 'priority', 'combination_num', 
@@ -61,6 +63,7 @@ class TempRecommendationDAO():
 
         return self.myConn.total_changes > 0
 
+    # Updates an entry in the table
     def updateTempRecommendation(self, the_temp_recommendation: TempRecommendation)-> bool:
             query = f'''
                 UPDATE {self.tableName}
@@ -75,6 +78,7 @@ class TempRecommendationDAO():
             self.myConn.commit()
             return self.myConn.total_changes == 1
 
+    # Deletes an entry from the table
     def deleteTempRecommendation(self, the_temp_recommendation: TempRecommendation) -> bool:
         query = f"""
                     DELETE FROM {self.tableName}
@@ -85,6 +89,15 @@ class TempRecommendationDAO():
         self.myConn.commit()
 
         return self.myConn.total_changes > 0
+
+    # Returns a list of int containing the user_ids
+    # for whom the temporary recommendations are present
+    def getAllUserID(self) -> List[int]:
+        output = []
+        cursor = self.myConn.execute(f"SELECT DISTINCT user_id FROM {self.tableName}")
+        for row in cursor:
+            output.append(row[0])
+        return output
 
     # Return a Rating object by converting
     # a row list of SQLite to Rating(userId, movieId, rating)
