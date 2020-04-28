@@ -13,8 +13,9 @@ elif not os.path.isfile("constant_paths.py"):
 else:
     config_path = os.path.abspath("config/db_properties.json")
     db_path = os.path.abspath("db/all.db")
+    log_path = os.path.abspath("logs")
 
-    print("Setting up the config file...")
+    # print("Setting up the config file...")
 
     content = None
     with open(config_path, "r+") as file:
@@ -26,14 +27,15 @@ else:
         file.write(json.dumps(content, indent=4))
         file.truncate()
 
-    print("Created config file succesfully!")
+    # print("Created config file successfully!")
 
-    print("Setting up the path file...")
+    # print("Setting up the path file...")
 
     path_file = os.path.abspath("constant_paths.py")
 
     with open(path_file, "w") as file:
         file.write("CONFIG_FILE_PATH = " + repr(config_path))
+        file.write("\nLOG_FILE_PATH = " + repr(log_path))
         file.truncate()
 
-    print("Created path file succesfully!")
+    # print("Created path file successfully!")

@@ -1,0 +1,98 @@
+Non zero movie genres are
+[1, 2, 3, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+Adding user to generating_recommendation list...
+done!
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 1
+The genre list is [2, 1]
+The priority is 2
+The combination number for the set is 40
+The number of common movies are 1
+The genre list is [4, 2]
+The priority is 1
+The combination number for the set is 56
+The number of common movies are 1
+The genre list is [4, 3, 2]
+The priority is 3
+The combination number for the set is 124
+The number of common movies are 3
+The genre list is [5, 4, 3, 2, 1]
+The priority is 2
+The combination number for the set is 256
+The number of common movies are 3
+The genre list is [8]
+The priority is 1
+The combination number for the set is 261
+The number of common movies are 2
+The genre list is [8, 1, 18]
+The priority is 3
+The combination number for the set is 384
+The number of common movies are 6
+The genre list is [8, 6]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+The priority is 3
+The combination number for the set is 32780
+The number of common movies are 7
+The genre list is [16, 2, 1]
+The priority is 1
+The combination number for the set is 34828
+The number of common movies are 4
+The genre list is [16, 12, 2, 1]
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+The priority is 1
+The combination number for the set is 98316
+The number of common movies are 5
+The genre list is [17, 16, 2, 1]
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000
+Deleting old recommendations...
+done!
+Adding new recommendations...
+done!
+Cleanup of temporary recommendations...
+done!
+Deleting user from generating_recommendation list...
+done!
+The recommendations are...
+[
+    {
+        "priority": 1,
+        "combination_num": 98316,
+        "common_movie_length": 5,
+        "common_genres": [
+            17,
+            16,
+            2,
+            1
+        ]
+    },
+    {
+        "priority": 2,
+        "combination_num": 384,
+        "common_movie_length": 6,
+        "common_genres": [
+            8,
+            6
+        ]
+    },
+    {
+        "priority": 3,
+        "combination_num": 32780,
+        "common_movie_length": 7,
+        "common_genres": [
+            16,
+            2,
+            1
+        ]
+    }
+]

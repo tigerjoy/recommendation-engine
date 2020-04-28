@@ -39,7 +39,7 @@ class UserMovieCountDAO():
     # Return a list of UserMovieCount objects
     # containing rows which have userId and genreId
     # column same as the argument
-    def searchByUserIDGenreID(self, userId:int, genreId:int) -> List[UserMovieCount]:
+    def searchByUserIDGenreID(self, userId:int, genreId:int) -> int:
         gdDAO = GenreDAO(self.prop_file)
 
         # Obtaining the genreName from genreId
@@ -68,6 +68,64 @@ class UserMovieCountDAO():
             output.append(self.convertRowToUserMovieCount(row))
 
         return output
+
+    # Add a user movie count entry in table
+    # Returns True if insert operation is successful, False otherwise
+    def addUserMovieGenreCount(self, the_count: UserMovieCount) -> bool:
+        query = f"""
+                    INSERT INTO '{self.tableName}' 
+                    (   'userId', 'Action', 'Adventure', 'Animation', 'Children', 'Comedy', 'Crime', 'Documentary', 
+                        'Drama', 'Fantasy', 'Film-Noir', 'Horror', 'IMAX', 'Musical', 'Mystery', 'Romance', 'Sci-Fi', 
+                        'Thriller', 'War', 'Western' ) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+                """
+
+        data = []
+
+        # Adding the user_id
+        data.append(the_count.getUserID())
+
+        # Adding the genre counts
+        for count in the_count.getGenreCount():
+            data.append(count)
+
+        data_tuple = tuple(data)
+
+        self.myConn.execute(query, data_tuple)
+
+        self.myConn.commit()
+
+        return self.myConn.total_changes > 0
+
+    # Update a user movie count entry in table
+    # Returns True if insert operation is successful, False otherwise
+    def updateMovieGenreCount(self, the_count: UserMovieCount) -> bool:
+        query = f'''
+                    UPDATE {self.tableName}
+                    SET 'Action' = {the_count.getGenreCount()[0]},
+                        'Adventure' = {the_count.getGenreCount()[1]},
+                        'Animation' = {the_count.getGenreCount()[2]},
+                        'Children' = {the_count.getGenreCount()[3]},
+                        'Comedy' = {the_count.getGenreCount()[4]},
+                        'Crime' = {the_count.getGenreCount()[5]},
+                        'Documentary' = {the_count.getGenreCount()[6]},
+                        'Drama' = {the_count.getGenreCount()[7]},
+                        'Fantasy' = {the_count.getGenreCount()[8]},
+                        'Film-Noir' = {the_count.getGenreCount()[9]},
+                        'Horror' = {the_count.getGenreCount()[10]},
+                        'IMAX' = {the_count.getGenreCount()[11]},
+                        'Musical' = {the_count.getGenreCount()[12]},
+                        'Mystery' = {the_count.getGenreCount()[13]},
+                        'Romance' = {the_count.getGenreCount()[14]},
+                        'Sci-Fi' = {the_count.getGenreCount()[15]},
+                        'Thriller' = {the_count.getGenreCount()[16]},
+                        'War' = {the_count.getGenreCount()[17]},
+                        'Western' = {the_count.getGenreCount()[18]}
+                    WHERE userId = {the_count.getUserID()}
+                 '''
+        self.myConn.execute(query)
+        self.myConn.commit()
+        return self.myConn.total_changes == 1
 
     # Return a UserMovieCount object by converting
     # a row list of SQLite to UserMovieCount(userId, Action, ...)

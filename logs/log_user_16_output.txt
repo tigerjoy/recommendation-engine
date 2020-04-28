@@ -1,0 +1,99 @@
+Non zero movie genres are
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 15, 16, 17, 18, 19]
+Adding user to generating_recommendation list...
+done!
+The priority is 3
+The combination number for the set is 2
+The number of common movies are 1
+The genre list is [1]
+The priority is 2
+The combination number for the set is 6
+The number of common movies are 1
+The genre list is [2, 1]
+The priority is 1
+The combination number for the set is 7
+The number of common movies are 1
+The genre list is [2, 1, 19]
+The priority is 3
+The combination number for the set is 32
+The number of common movies are 2
+The genre list is [5]
+The priority is 3
+The combination number for the set is 256
+The number of common movies are 6
+The genre list is [8]
+The priority is 2
+The combination number for the set is 320
+The number of common movies are 4
+The genre list is [8, 6]
+Current combination 10000
+The priority is 1
+The combination number for the set is 16416
+The number of common movies are 3
+The genre list is [15, 5]
+The priority is 1
+The combination number for the set is 16640
+The number of common movies are 4
+The genre list is [15, 8]
+Current combination 20000
+Current combination 30000
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000
+Current combination 140000
+Current combination 150000
+Current combination 160000
+Current combination 170000
+Current combination 180000
+Current combination 190000
+Current combination 200000
+Current combination 210000
+Current combination 220000
+Current combination 230000
+Current combination 240000
+Current combination 250000
+Current combination 260000
+Deleting old recommendations...
+done!
+Adding new recommendations...
+done!
+Cleanup of temporary recommendations...
+done!
+Deleting user from generating_recommendation list...
+done!
+The recommendations are...
+[
+    {
+        "priority": 1,
+        "combination_num": 16640,
+        "common_movie_length": 4,
+        "common_genres": [
+            15,
+            8
+        ]
+    },
+    {
+        "priority": 2,
+        "combination_num": 320,
+        "common_movie_length": 4,
+        "common_genres": [
+            8,
+            6
+        ]
+    },
+    {
+        "priority": 3,
+        "combination_num": 256,
+        "common_movie_length": 6,
+        "common_genres": [
+            8
+        ]
+    }
+]

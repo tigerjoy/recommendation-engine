@@ -1,0 +1,83 @@
+Non zero movie genres are
+[1, 2, 4, 5, 6, 8, 9, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+Adding user to generating_recommendation list...
+done!
+The priority is 3
+The combination number for the set is 1
+The number of common movies are 1
+The genre list is [17]
+The priority is 2
+The combination number for the set is 4
+The number of common movies are 1
+The genre list is [19]
+The priority is 1
+The combination number for the set is 9
+The number of common movies are 1
+The genre list is [1, 17]
+The priority is 3
+The combination number for the set is 25
+The number of common movies are 2
+The genre list is [2, 1, 17]
+The priority is 2
+The combination number for the set is 64
+The number of common movies are 2
+The genre list is [5]
+The priority is 1
+The combination number for the set is 137
+The number of common movies are 2
+The genre list is [6, 1, 17]
+The priority is 3
+The combination number for the set is 256
+The number of common movies are 7
+The genre list is [8]
+Current combination 10000
+The priority is 2
+The combination number for the set is 16448
+The number of common movies are 4
+The genre list is [15, 5]
+The priority is 1
+The combination number for the set is 16640
+The number of common movies are 3
+The genre list is [15, 8]
+Current combination 20000
+Current combination 30000
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Deleting old recommendations...
+done!
+Adding new recommendations...
+done!
+Cleanup of temporary recommendations...
+done!
+Deleting user from generating_recommendation list...
+done!
+The recommendations are...
+[
+    {
+        "priority": 1,
+        "combination_num": 16640,
+        "common_movie_length": 3,
+        "common_genres": [
+            15,
+            8
+        ]
+    },
+    {
+        "priority": 2,
+        "combination_num": 16448,
+        "common_movie_length": 4,
+        "common_genres": [
+            15,
+            5
+        ]
+    },
+    {
+        "priority": 3,
+        "combination_num": 256,
+        "common_movie_length": 7,
+        "common_genres": [
+            8
+        ]
+    }
+]

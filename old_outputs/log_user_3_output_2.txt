@@ -1,0 +1,54 @@
+The priority is 3
+The combination number for the set is 2
+The number of common movies are 1
+The genre list is [16]
+The priority is 2
+The combination number for the set is 16
+The number of common movies are 1
+The genre list is [1]
+The priority is 1
+The combination number for the set is 18
+The number of common movies are 1
+The genre list is [1, 16]
+The priority is 3
+The combination number for the set is 54
+The number of common movies are 2
+The genre list is [2, 1, 17, 16]
+The priority is 3
+The combination number for the set is 1024
+The number of common movies are 4
+The genre list is [8]
+The priority is 2
+The combination number for the set is 1032
+The number of common movies are 3
+The genre list is [8, 18]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+The priority is 3
+The combination number for the set is 2
+The number of common movies are 1
+The genre list is [16]
+The priority is 2
+The combination number for the set is 16
+The number of common movies are 1
+The genre list is [1]
+The priority is 1
+The combination number for the set is 18
+The number of common movies are 1
+The genre list is [1, 16]
+The priority is 3
+The combination number for the set is 54
+The number of common movies are 2
+The genre list is [2, 1, 17, 16]
+The priority is 3
+The combination number for the set is 1024
+The number of common movies are 4
+The genre list is [8]
+The priority is 2
+The combination number for the set is 1032
+The number of common movies are 3
+The genre list is [8, 18]
+Current combination 10000
+Current combination 20000
+Current combination 30000

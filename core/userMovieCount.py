@@ -1,11 +1,11 @@
 class UserMovieCount:
 
     # Parameterized Constructor
-    def __init__(self, userId:int = None, Action:int = None, Adventure:int = None, Animation:int = None,
-                 Children:int = None, Comedy:int = None, Crime:int = None, Documentary:int = None, Drama:int = None,
-                 Fantasy:int = None, FilmNoir:int = None, Horror:int = None, IMAX:int = None, Musical:int = None,
-                 Mystery:int = None,Romance:int = None, SciFi:int = None, Thriller:int = None, War:int = None,
-                 Western:int = None):
+    def __init__(self, userId:int, Action:int = 0, Adventure:int = 0, Animation:int = 0,
+                 Children:int = 0, Comedy:int = 0, Crime:int = 0, Documentary:int = 0, Drama:int = 0,
+                 Fantasy:int = 0, FilmNoir:int = 0, Horror:int = 0, IMAX:int = 0, Musical:int = 0,
+                 Mystery:int = 0,Romance:int = 0, SciFi:int = 0, Thriller:int = 0, War:int = 0,
+                 Western:int = 0):
         self.userId = userId
         self.Action = Action
         self.Adventure = Adventure
@@ -26,6 +26,14 @@ class UserMovieCount:
         self.Thriller = Thriller
         self.War = War
         self.Western = Western
+        self.genreCounts = [
+            self.Action, self.Adventure, self.Animation, self.Children, self.Comedy, self.Crime, self.Documentary,
+            self.Drama, self.Fantasy, self.FilmNoir, self.Horror, self.IMAX, self.Musical, self.Mystery,
+            self.Romance, self.SciFi, self.Thriller, self.War, self.Western
+        ]
+
+    def getGenreCount(self):
+        return self.genreCounts
 
     def getUserID(self) -> int:
         return self.userId

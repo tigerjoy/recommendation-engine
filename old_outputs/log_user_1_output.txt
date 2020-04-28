@@ -1,0 +1,146 @@
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 3
+The genre list is [2, 1]
+The priority is 2
+The combination number for the set is 48
+The number of common movies are 1
+The genre list is [4, 3]
+The priority is 1
+The combination number for the set is 56
+The number of common movies are 1
+The genre list is [4, 3, 2]
+The priority is 3
+The combination number for the set is 64
+The number of common movies are 11
+The genre list is [5]
+The priority is 1
+The combination number for the set is 65
+The number of common movies are 2
+The genre list is [5, 18]
+The priority is 1
+The combination number for the set is 132
+The number of common movies are 3
+The genre list is [6, 1]
+The priority is 2
+The combination number for the set is 192
+The number of common movies are 5
+The genre list is [6, 5]
+The priority is 1
+The combination number for the set is 257
+The number of common movies are 4
+The genre list is [8, 18]
+The priority is 2
+The combination number for the set is 261
+The number of common movies are 8
+The genre list is [8, 1, 18]
+The priority is 1
+The combination number for the set is 320
+The number of common movies are 6
+The genre list is [8, 5]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+The priority is 2
+The combination number for the set is 32780
+The number of common movies are 11
+The genre list is [16, 2, 1]
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000
+Current combination 0
+Current combination 0
+Current combination 0
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 3
+The genre list is [2, 1]
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 3
+The genre list is [2, 1]
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 3
+The genre list is [2, 1]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000
+Current combination 130000
+Current combination 130000
+Current combination 130000
+Current combination 130000
+The priority is 3
+The combination number for the set is 12
+The number of common movies are 3
+The genre list is [2, 1]
+The priority is 2
+The combination number for the set is 48
+The number of common movies are 1
+The genre list is [4, 3]
+The priority is 1
+The combination number for the set is 56
+The number of common movies are 1
+The genre list is [4, 3, 2]
+The priority is 3
+The combination number for the set is 64
+The number of common movies are 11
+The genre list is [5]
+The priority is 1
+The combination number for the set is 65
+The number of common movies are 2
+The genre list is [5, 18]
+The priority is 1
+The combination number for the set is 132
+The number of common movies are 3
+The genre list is [6, 1]
+The priority is 2
+The combination number for the set is 192
+The number of common movies are 5
+The genre list is [6, 5]
+The priority is 1
+The combination number for the set is 257
+The number of common movies are 4
+The genre list is [8, 18]
+The priority is 2
+The combination number for the set is 261
+The number of common movies are 8
+The genre list is [8, 1, 18]
+The priority is 1
+The combination number for the set is 320
+The number of common movies are 6
+The genre list is [8, 5]
+Current combination 10000
+Current combination 20000
+Current combination 30000
+The priority is 2
+The combination number for the set is 32780
+The number of common movies are 11
+The genre list is [16, 2, 1]
+Current combination 40000
+Current combination 50000
+Current combination 60000
+Current combination 70000
+Current combination 80000
+Current combination 90000
+Current combination 100000
+Current combination 110000
+Current combination 120000
+Current combination 130000

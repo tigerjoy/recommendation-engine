@@ -1,0 +1,31 @@
+{
+    "last_combination": 16383,
+    "recommendations": [
+        {
+            "priority": 1,
+            "combination_num": 512,
+            "common_movie_length": 2,
+            "common_genres": [
+                7
+            ]
+        },
+        {
+            "priority": 2,
+            "combination_num": 1284,
+            "common_movie_length": 3,
+            "common_genres": [
+                8,
+                6,
+                17
+            ]
+        },
+        {
+            "priority": 3,
+            "combination_num": 128,
+            "common_movie_length": 3,
+            "common_genres": [
+                5
+            ]
+        }
+    ]
+}

@@ -25,10 +25,17 @@ class AverageRatingDAO():
 
     # Return a list of AverageRating objects
     # containing all the rows present in the rating table
-    def getAllAverageRatings(self) -> List[AverageRating]:
+    # in ascending order of average rating if ascending is True,
+    # in descending order of average rating otherwise
+    def getAllAverageRatings(self, ascending: bool) -> List[AverageRating]:
         output = []
-
-        cursor = self.myConn.execute(f"SELECT * FROM {self.tableName}")
+        order = "ASC" if ascending else "DESC";
+        query = f"""
+                    SELECT *
+                    FROM {self.tableName}
+                    ORDER BY avgRating {order}
+                """
+        cursor = self.myConn.execute(query)
 
         for row in cursor:
             output.append(self.convertRowToAverageRating(row))
@@ -121,6 +128,32 @@ class AverageRatingDAO():
         for row in cursor:
             output.append(self.convertRowToAverageRating(row))
         return output
+
+    # Add a average rating entry for a movie
+    def addAverageRatingByMovie(self, the_avg_rating: AverageRating) -> bool:
+        query = f"""
+                    INSERT INTO '{self.tableName}' ('movieId', 'avgRating') 
+                    VALUES (?, ?);
+                """
+
+        data_tuple = (the_avg_rating.getMovieID(), the_avg_rating.getAverageRating())
+
+        self.myConn.execute(query, data_tuple)
+
+        self.myConn.commit()
+
+        return self.myConn.total_changes > 0
+
+    # Update the average rating entry for a movie
+    def updateAverageRatingByMovie(self, the_avg_rating: AverageRating) -> bool:
+        query = f'''
+                    UPDATE {self.tableName}
+                    SET avgRating = {the_avg_rating.getAverageRating()}
+                    WHERE movieId = {the_avg_rating.getMovieID()}
+                 '''
+        self.myConn.execute(query)
+        self.myConn.commit()
+        return self.myConn.total_changes == 1
 
     # Return a list of AverageRating objects
     # containing rows which have the movieId
