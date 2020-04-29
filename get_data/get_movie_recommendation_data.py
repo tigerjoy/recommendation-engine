@@ -75,13 +75,23 @@ def get_all_recommended_movies(user_id: int, priority: int) -> str:
 
     return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
+
 # count_calls = 0
 def start_generation(user_id: int):
     # global count_calls
     # count_calls += 1
     # print(f"Called {count_calls}")
-    x = threading.Thread(target=gr.largestIntersectionSQL, args=(user_id, True))
-    x.start()
+    thread_name = "Thread_User_" + str(user_id)
+    # Check if a thread is already running for this user
+    thread_exists = False
+    for thread in threading.enumerate():
+        if thread.getName() == thread_name:
+            print("Thread already exists! " + thread_name)
+            thread_exists = True
+            break
+    if not thread_exists:
+        x = threading.Thread(name=thread_name ,target=gr.largestIntersectionSQL, args=(user_id, True))
+        x.start()
 
 
 def should_generate_recommendations(user_id: int, priority: int) -> bool:
@@ -144,8 +154,8 @@ def should_generate_recommendations(user_id: int, priority: int) -> bool:
 # 	]
 # }
 def get_recommended_movies(user_id: int, priority: int, count: int = 15) -> str:
-    artificial_wait = 2
-    time.sleep(artificial_wait)
+    # artificial_wait = 2
+    # time.sleep(artificial_wait)
     result_dict = {"user_id": user_id, "priority": priority,
                    "is_generating_recommendation": should_generate_recommendations(user_id, priority)}
     # Check if new recommendations are required
@@ -344,7 +354,7 @@ def get_popular_movies(user_id: int, count: int = 15) -> str:
 
 if __name__ == "__main__":
     # print(get_all_recommended_movies(1, 3))
-    user_id = 147
+    user_id = 257
     print(get_recommended_movies(user_id, 1))
     # time.sleep(2)
     print(get_recommended_movies(user_id, 2))
