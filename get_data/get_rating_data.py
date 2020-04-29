@@ -58,10 +58,16 @@ def get_all_users() -> str:
     return json.dumps(result_dict, indent=4, ensure_ascii=False)
 
 
+# Returns a JSON string containing the result of checking if a
+# user exists
+# {
+#     "user_id": 1,
+#     "exist: true
+# }
 def check_user_exists(userId: int) -> str:
     dao = RatingDAO(constant_paths.CONFIG_FILE_PATH)
     user_ids = dao.getAllUsers()
-    result_dict = {"exist": False}
+    result_dict = {"user_id": userId, "exist": False}
     for user_id in user_ids:
         if user_id == userId:
             result_dict["exist"] = True
