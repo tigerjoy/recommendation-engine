@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>A R T F L I X</title>
+  <link rel="stylesheet" href="../static/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </div>
+          </nav> -->
+  <!-- ORIGINAL NAV BAR -->
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <img src="https://fontmeme.com/permalink/200429/a43fc5e06ec186828d5f025d260f3124.png" alt="netflix-font"
+            border="0" width="60%">
+        </a>
+      </div>
+      <h3>
+        Current User is: <span id="user-display"></span>
+      </h3>
+      <form class="form-inline my-2 my-lg-0">
+        <input id="user-id-text" class="form-control mr-sm-2" type="text" placeholder="Enter user id...">
+        <button id="view-button" class="btn btn-secondary my-2 my-sm-0" type="submit">View</button>
+      </form>
+      <!-- DROPDOWN -->
+      <!-- <div class="dropdown">
+                    <button class="dropbtn"><span class="material-icons">
+                        people
+                        </span></button>
+                    <div class="dropdown-content">
+                      <a href="user.html">User 1</a>
+                      <a href="#">User 2</a>
+                      <a href="#">User 3</a>
+                    </div>
+                  </div> -->
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="jumbotron">
+      <h3 class="text-center">Search for Movies</h3>
+
+      <form id="searchForm">
+        <input type="text" class="form-control" id="searchText" placeholder="Search Movie...">
+      </form>
+    </div>
+  </div>
+
+  <!-- adding all the movies in the index page into this div -->
+  <div class="container">
+    <div id="movies" class="row"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+  </script>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+  <script src="../static/main.js"></script>
+
+</body>
+
+</html>
