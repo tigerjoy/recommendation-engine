@@ -65,14 +65,14 @@ if __name__ == "__main__":
     dao = GenreDAO("../config/db_properties.json")
 
     table = dao.getAllGenres()
-    output = ""
+    # output = ""
 
     i = 0
     for row in table:
-        print(f"'{row.getGenreName()}' = {{the_count.getGenreCount()[{i}]}},")
+        print(f"{row.getGenreName()}, ", end="")
         i += 1
 
-    print(output.strip())
+    # print(output.strip())
     # output = ""
 
     # for genre in dao.getAllGenres():

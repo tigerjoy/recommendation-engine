@@ -1,0 +1,71 @@
+Non zero movie genres are
+[1, 2, 4, 5, 6, 8, 11, 12, 14, 15, 16, 17, 18]
+Adding user to generating_recommendation list...
+done!
+The priority is 3
+The combination number for the set is 16
+The number of common movies are 1
+The genre list is [17]
+The priority is 2
+The combination number for the set is 18
+The number of common movies are 1
+The genre list is [17, 14]
+The priority is 1
+The combination number for the set is 200
+The number of common movies are 1
+The genre list is [2, 1, 16]
+The priority is 3
+The combination number for the set is 208
+The number of common movies are 2
+The genre list is [2, 1, 17]
+The priority is 3
+The combination number for the set is 1104
+The number of common movies are 4
+The genre list is [6, 1, 17]
+The priority is 1
+The combination number for the set is 2064
+The number of common movies are 2
+The genre list is [8, 17]
+Deleting old recommendations...
+done!
+Adding new recommendations...
+done!
+Deleting user from generating_recommendation list...
+done!
+Cleanup of temporary recommendations...
+done!
+The recommendations are...
+[
+    {
+        "priority": 1,
+        "combination_num": 2064,
+        "common_movie_length": 2,
+        "common_genres": [
+            8,
+            17
+        ]
+    },
+    {
+        "priority": 2,
+        "combination_num": 208,
+        "common_movie_length": 2,
+        "common_genres": [
+            2,
+            1,
+            17
+        ]
+    },
+    {
+        "priority": 3,
+        "combination_num": 1104,
+        "common_movie_length": 4,
+        "common_genres": [
+            6,
+            1,
+            17
+        ]
+    }
+]
+Time taken to perform intersection: 00:00:15
+
+

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>User Recommendations</title>
+  <link rel="stylesheet" href="../static/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <img src="https://fontmeme.com/permalink/200429/a43fc5e06ec186828d5f025d260f3124.png" alt="netflix-font"
+            border="0" width="60%">
+        </a>
+      </div>
+      <h3>
+        Current User is: <span id="user-display"></span>
+      </h3>
+      <!-- <div class="dropdown">
+                <button class="dropbtn"><span class="material-icons">
+                    people
+                    </span></button>
+                <div class="dropdown-content">
+                  <a href="user.html">User 1</a>
+                  <a href="#">User 2</a>
+                  <a href="#">User 3</a>
+                </div>
+              </div> -->
+    </div>
+  </nav>
+
+  <!-- newly pasted-->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <!-- <div class="alert alert-dismissible alert-secondary">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
+    </div> -->
+
+  <section id="generating-recommendation">
+
+  </section>
+
+  <section id="popular-not-found">
+
+  </section>
+
+  <section id="priority1-not-found">
+
+  </section>
+
+  <section id="priority2-not-found">
+
+  </section>
+
+
+  <section id="priority3-not-found">
+
+  </section>
+
+
+  <div>
+    <h3 id="popular-heading">Popular Movies</h3>
+    <div class="wrapper">
+      <section id="section11">
+
+      </section>
+      <section id="section12">
+
+      </section>
+      <section id="section13">
+
+      </section>
+    </div>
+  </div>
+
+
+
+
+
+
+  <div>
+    <h3 id="priority3-heading">Priority-3 Movies</h3>
+    <div class="wrapper">
+      <section id="section41">
+
+      </section>
+      <section id="section42">
+
+      </section>
+      <section id="section43">
+
+      </section>
+    </div>
+  </div>
+
+
+  <div>
+    <h3 id="priority2-heading">Priority-2 Movies</h3>
+    <div class="wrapper">
+      <section id="section31">
+
+      </section>
+      <section id="section32">
+
+      </section>
+      <section id="section33">
+
+      </section>
+    </div>
+  </div>
+
+  <div>
+    <h3 id="priority1-heading">Priority-1 Movies</h3>
+    <div class="wrapper">
+      <section id="section21">
+
+      </section>
+      <section id="section22">
+
+      </section>
+      <section id="section23">
+
+      </section>
+    </div>
+  </div>
+
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+  </script>
+
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="../static/main.js"></script>
+  <script>
+    if (sessionStorage.getItem('userId')) {
+      document.getElementById("user-display").innerHTML = sessionStorage.getItem('userId');
+    } else {
+      document.getElementById("user-display").innerHTML = "No one";
+    }
+    renderHTML();
+    // populateCarousel();
+    // populatePriority1();
+    // populatePriority2();
+    // populatePriority3();
+  </script>
+</body>
+
+</html>
